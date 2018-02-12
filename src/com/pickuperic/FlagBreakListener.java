@@ -18,21 +18,20 @@ public class FlagBreakListener implements Listener {
 		
 		if (eventBlock.getType() == Material.STANDING_BANNER) {	//If banner is destroyed
 			
-			for (String team : Teams.getBannerKeys()) {	
+			for (String team : Teams.teams.keySet()) {	
 				
-				if (eventBlock.equals(Teams.getBannerBlock(team))) {
-					String chatColor = Teams.getTeam(event.getPlayer());
-					if (chatColor.equals("ORANGE"))
-						chatColor = "GOLD";
+				if (eventBlock.equals(Teams.teams.get(team).getBannerBlock())) {
+					
 					Bukkit.broadcastMessage(ChatColor.DARK_RED + "=====================================================");
-					Bukkit.broadcastMessage(ChatColor.GREEN + "TEAM " + ChatColor.valueOf(team.equals("ORANGE") ? "GOLD" : team) + ChatColor.BOLD + team + ChatColor.RESET + ChatColor.GREEN + 
-							"'S FLAG HAS BEEN BROKEN BY " + ChatColor.valueOf(chatColor) + event.getPlayer().getDisplayName() + ChatColor.GREEN + "!");
-					Bukkit.broadcastMessage(ChatColor.GREEN + "TEAM " + ChatColor.valueOf(team.equals("ORANGE") ? "GOLD" : team) + ChatColor.BOLD + team + ChatColor.RESET + ChatColor.GREEN + 
-							"'S FLAG HAS BEEN BROKEN BY " + ChatColor.valueOf(chatColor) + event.getPlayer().getDisplayName() + ChatColor.GREEN + "!");
-					Bukkit.broadcastMessage(ChatColor.GREEN + "TEAM " + ChatColor.valueOf(team.equals("ORANGE") ? "GOLD" : team) + ChatColor.BOLD + team + ChatColor.RESET + ChatColor.GREEN + 
-							"'S FLAG HAS BEEN BROKEN BY " + ChatColor.valueOf(chatColor) + event.getPlayer().getDisplayName() + ChatColor.GREEN + "!");
+					Bukkit.broadcastMessage(ChatColor.GREEN + "TEAM " + Teams.teams.get(team).printTeamName() + ChatColor.GREEN + 
+							"'S FLAG HAS BEEN BROKEN BY " + Teams.getPlayerColor(event.getPlayer()) + event.getPlayer().getDisplayName() + ChatColor.GREEN + "!");
+					Bukkit.broadcastMessage(ChatColor.GREEN + "TEAM " + Teams.teams.get(team).printTeamName() + ChatColor.RESET + ChatColor.GREEN + 
+							"'S FLAG HAS BEEN BROKEN BY " + Teams.getPlayerColor(event.getPlayer()) + event.getPlayer().getDisplayName() + ChatColor.GREEN + "!");
+					Bukkit.broadcastMessage(ChatColor.GREEN + "TEAM " + Teams.teams.get(team).printTeamName() + ChatColor.RESET + ChatColor.GREEN + 
+							"'S FLAG HAS BEEN BROKEN BY " + Teams.getPlayerColor(event.getPlayer()) + event.getPlayer().getDisplayName() + ChatColor.GREEN + "!");
 					Bukkit.broadcastMessage(ChatColor.DARK_RED + "=====================================================");
 					
+					Teams.teams.get(team).removeBanner();
 				}
 			}
 		}

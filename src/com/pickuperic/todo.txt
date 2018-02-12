@@ -1,5 +1,7 @@
 Cases:
 Block under flag is broken (drops flag)
+When flag is broken, block is still saved and if you place another flag in the same spot it will announce original flag was broken too
+
 
 Fix:
 Breaking flag when not in team

@@ -25,15 +25,12 @@ public class CommandSetTeam implements CommandExecutor {
 			
 			if (player == null) {
 				sender.sendMessage(ChatColor.RED + "Invalid user.");
-			} else if (!CommandPlaceFlag.bannerColors.contains(team)) {
+			} else if (!Teams.containsTeam(team)) {
 				sender.sendMessage(ChatColor.RED + "Invalid arguments: /setteam <player> <team>");
-				sender.sendMessage(ChatColor.RED + "Invalid team name. Please choose from: " + String.join(", ", CommandPlaceFlag.bannerColors));
+				sender.sendMessage(ChatColor.RED + "Invalid team name. Please choose from: " + String.join(", ", Teams.teams.keySet()));
 			} else {
-				Teams.addPlayer(player, team);
-				sender.sendMessage(ChatColor.GREEN + "Successfully added " + player.getDisplayName() + " to team " + ChatColor.valueOf(team.equals("ORANGE") ? "GOLD" : team) + ChatColor.BOLD + team + 
-						ChatColor.RESET + ChatColor.GREEN + ".");
-				player.sendMessage(ChatColor.GREEN + "You've been added to team " + ChatColor.valueOf(team.equals("ORANGE") ? "GOLD" : team) + ChatColor.BOLD + team + 
-						ChatColor.RESET + ChatColor.GREEN + ".");
+				Teams.teams.get(team.toUpperCase()).addPlayer(player);
+				sender.sendMessage(ChatColor.GREEN + "Successfully added " + player.getDisplayName() + " to team " + Teams.teams.get(team.toUpperCase()).printTeamName() + ChatColor.GREEN + ".");
 			}
 		}
 	

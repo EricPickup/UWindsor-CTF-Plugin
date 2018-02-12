@@ -1,77 +1,57 @@
 package com.pickuperic;
 
+import java.awt.List;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Set;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+
+import net.md_5.bungee.api.ChatColor;
 
 //Contains list of players with their associating teams
 
 public class Teams {
 	
-	private static Hashtable<Player, String> players = new Hashtable<Player, String>();
-	private static HashMap<String, Block> banners = new HashMap<String, Block>();
+	public static HashMap<String, Team> teams = new HashMap<String, Team>();
+	static ArrayList<String> availableColors = new ArrayList<String>();
 	
-	public static boolean addPlayer(Player player, String team) {
-		players.put(player, team);
-		return true;
+	
+	public static boolean addTeam(String teamName, String teamColor) {
+		teamColor = teamColor.toUpperCase();
+		if (containsTeam(teamName)) {
+			return false;
+		} else if(!availableColors.contains(teamColor)) {
+			System.out.println("INVALID COLOR, does not contain " + teamColor);
+			System.out.println(availableColors);
+			return false;
+		} else {
+			teams.put(teamName.toUpperCase(), new Team(teamName, teamColor));
+			return true;
+		}
 	}
 	
-	public static boolean removePlayer(Player player, String team) {
-		if (players.contains(player)) {
-			players.remove(player);
+	public static boolean containsTeam(String teamName) {
+		return teams.containsKey(teamName.toUpperCase());
+	}
+	
+	public static boolean removeTeam(String teamName) {
+		teamName = teamName.toUpperCase();
+		if (containsTeam(teamName)) {
+			teams.remove(teamName);
 			return true;
 		}
 		return false;
 	}
 	
-	public static Set<String> getBannerKeys() {
-		return banners.keySet();
-	}
-	
-	public static String getTeam(Player player) {
-		return players.get(player);
-	}
-	
-	public static boolean addBanner(String team, Block bannerBlock) {
-		if (banners.containsKey(team)) {
-			removeBanner(team);
+	public static String getPlayerTeam(Player player) {
+		for (Team team : teams.values()) {
+			if (team.containsPlayer(player)) {
+				return team.getName().toUpperCase();
+			}
 		}
-		banners.put(team, bannerBlock);
-		return false;
+		return null;
 	}
 	
-	public static boolean containsFlag(String team) {
-		return banners.containsKey(team);
-	}
-	
-	public static boolean removeBanner(String team) {
-		if (banners.containsKey(team)) {
-			banners.get(team).setType(Material.AIR);
-		}
-		return true;
-	}
-	
-	public static String getBannerCoordinates(String team) {
-		if (banners.containsKey(team)) {
-			return ("X: " + banners.get(team).getX() + " Y: " + banners.get(team).getY() + " Z: " + banners.get(team).getZ());
-		} else {
-			return "Flag does not exist!";
-		}
-	}
-	
-	public static Location getBannerLocation(String team) {
-		if (banners.containsKey(team)) {
-			return banners.get(team).getLocation();
-		} else {
-			return null;
-		}
-	}
-	
-	public static Block getBannerBlock(String team) {
-		return banners.get(team);
+	public static ChatColor getPlayerColor(Player player) {
+		return Teams.teams.get(getPlayerTeam(player)).getColor();
 	}
 }

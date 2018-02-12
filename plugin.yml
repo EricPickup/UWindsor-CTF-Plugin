@@ -11,3 +11,9 @@ commands:
   setteam:
     description: Sets the specified user's specified team
     usage: /setteam
+  getteam:
+    description: Gets the team name of the specified user
+    usage: /getteam
+  addteam:
+    description: Adds a team
+    usage: /addteam

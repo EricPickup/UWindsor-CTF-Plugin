@@ -1,0 +1,5 @@
+Cases:
+Block under flag is broken (drops flag)
+
+Fix:
+Breaking flag when not in team

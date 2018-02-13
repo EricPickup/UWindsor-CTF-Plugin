@@ -1,6 +1,9 @@
 package com.pickuperic;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.Scoreboard;
 
 public class Main extends JavaPlugin {
 	
@@ -25,7 +28,23 @@ public class Main extends JavaPlugin {
 		Teams.availableColors.add("WHITE");
 		System.out.println(Teams.availableColors);
 		
+		
+		
 		Teams.addTeam("BASE", "WHITE");
+		
+		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
+		for (org.bukkit.scoreboard.Team team : board.getTeams()) {
+			team.unregister();
+		}
+		
+		for (String entry : board.getEntries()) {
+			Player player = Bukkit.getServer().getPlayerExact(entry);
+			if (player != null) {
+				player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+			}
+		}
+		
+		
     	getServer().getPluginManager().registerEvents(new FlagBreakListener(), this);
     	getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
     	getServer().getPluginManager().registerEvents(new FlagIndirectBreakListener(), this);

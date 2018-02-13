@@ -2,10 +2,12 @@ package com.pickuperic;
 
 import java.util.ArrayList;
 
+import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.*;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -16,6 +18,8 @@ public class Team {
 	private ArrayList<String> members = new ArrayList<String>();
 	private Block bannerBlock;
 	private DyeColor bannerColor;
+	public static Scoreboard sb = Bukkit.getScoreboardManager().getMainScoreboard();
+	private org.bukkit.scoreboard.Team scoreboardTeam;
 	
 	public Team (String teamName, String teamColor) {
 		
@@ -33,18 +37,30 @@ public class Team {
 			this.bannerColor = DyeColor.PINK;
 		else
 			this.bannerColor = DyeColor.valueOf(teamColor);
+		this.scoreboardTeam = sb.registerNewTeam(teamName.toUpperCase());
+		this.scoreboardTeam.setPrefix(getColor().toString());
 	}
 	
 	public void addPlayer(Player player) {
-		members.add(player.getDisplayName());
-		player.sendMessage(ChatColor.GREEN + "You've been added to team " + ChatColor.valueOf(teamColor) + ChatColor.BOLD + teamName + 
-				ChatColor.RESET + ChatColor.GREEN + ".");
+		
+		members.add(player.getName());
+		player.sendMessage(ChatColor.GREEN + "You've been added to team " + printTeamName() + ChatColor.GREEN + ".");
+		scoreboardTeam.addEntry(player.getName());
+		player.setDisplayName(getColor() + player.getName() + ChatColor.RESET);
+		
+		for (String team : Teams.teams.keySet()) {
+			if (Teams.teams.get(team).containsPlayer(player) && !team.equals(this.teamName.toUpperCase())) {
+				System.out.println(team + " != " + this.teamName.toUpperCase());
+				Teams.teams.get(team).removePlayer(player);
+			}
+		}
 	}
 	
 	public void removePlayer(Player player) {
-		members.remove(player.getDisplayName());
+		members.remove(player.getName());
 		player.sendMessage(ChatColor.GREEN + "You've been removed from team " + ChatColor.valueOf(teamColor) + ChatColor.BOLD + teamName + 
 				ChatColor.RESET + ChatColor.GREEN + ".");
+		scoreboardTeam.removeEntry(player.getName());
 	}
 	
 	public void addBanner(Block bannerBlock) {
@@ -73,7 +89,7 @@ public class Team {
 	}
 	
 	public boolean containsPlayer(Player player) {
-		return members.contains(player.getDisplayName());
+		return members.contains(player.getName());
 	}
 	
 	public ChatColor getColor() {
@@ -93,7 +109,7 @@ public class Team {
 	}
 	
 	public String printTeamName() {
-		return ("" + getColor() + ChatColor.BOLD + teamName.toUpperCase() + ChatColor.RESET);
+		return ("" + getColor() + ChatColor.BOLD + ChatColor.RESET);
 	}
 	
 	public Block getBannerBlock() {

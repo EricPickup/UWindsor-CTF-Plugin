@@ -24,9 +24,9 @@ public class CommandGetTeam implements CommandExecutor {
 		if (player == null) {
 			sender.sendMessage(ChatColor.RED + "Invalid user!");
 		} else if (Teams.getPlayerTeam(player) == null) {
-			sender.sendMessage(ChatColor.GREEN + "User " + Teams.getPlayerColor(player) + player.getDisplayName() + ChatColor.GREEN + " is not part of a team.");
+			sender.sendMessage(ChatColor.GREEN + "User " + player.getDisplayName() + ChatColor.GREEN + " is not part of a team.");
 		} else {
-			sender.sendMessage(ChatColor.GREEN + "Player " + Teams.getPlayerColor(player) + player.getDisplayName() + ChatColor.GREEN + " is part of team " + Teams.teams.get(Teams.getPlayerTeam(player).toUpperCase()).printTeamName() + ChatColor.GREEN + ".");
+			sender.sendMessage(ChatColor.GREEN + "Player "+ player.getDisplayName() + ChatColor.GREEN + " is part of team " + Teams.teams.get(Teams.getPlayerTeam(player).toUpperCase()).printTeamName() + ChatColor.GREEN + ".");
 		}
 	
 		 return true;

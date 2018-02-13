@@ -30,7 +30,7 @@ public class CommandSetTeam implements CommandExecutor {
 				sender.sendMessage(ChatColor.RED + "Invalid team name. Please choose from: " + String.join(", ", Teams.teams.keySet()));
 			} else {
 				Teams.teams.get(team.toUpperCase()).addPlayer(player);
-				sender.sendMessage(ChatColor.GREEN + "Successfully added " + player.getDisplayName() + " to team " + Teams.teams.get(team.toUpperCase()).printTeamName() + ChatColor.GREEN + ".");
+				sender.sendMessage(ChatColor.GREEN + "Successfully added " + player.getDisplayName() + ChatColor.GREEN + " to team " + Teams.teams.get(team.toUpperCase()).printTeamName() + ChatColor.GREEN + ".");
 			}
 		}
 	

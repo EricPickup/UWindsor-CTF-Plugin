@@ -1,6 +1,5 @@
 package com.pickuperic;
 
-import java.awt.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.bukkit.entity.Player;
@@ -52,6 +51,6 @@ public class Teams {
 	}
 	
 	public static ChatColor getPlayerColor(Player player) {
-		return Teams.teams.get(getPlayerTeam(player)).getColor();
+		return Teams.teams.get(getPlayerTeam(player).toUpperCase()).getColor();
 	}
 }

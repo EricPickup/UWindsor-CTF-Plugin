@@ -28,6 +28,7 @@ public class Main extends JavaPlugin {
 		Teams.addTeam("BASE", "WHITE");
     	getServer().getPluginManager().registerEvents(new FlagBreakListener(), this);
     	getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
+    	getServer().getPluginManager().registerEvents(new FlagIndirectBreakListener(), this);
     }
     // Fired when disabled
     @Override

@@ -1,10 +1,6 @@
 package com.pickuperic;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import org.bukkit.Bukkit;
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -19,6 +15,11 @@ public class CommandPlaceFlag implements CommandExecutor {
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		
+		if (args.length < 1) {
+			sender.sendMessage(ChatColor.RED + "Invalid arguments: /placeflag <teamName>");
+			return true;
+		}
 		
 		String teamName = args[0].toUpperCase();
 		
@@ -53,6 +54,6 @@ public class CommandPlaceFlag implements CommandExecutor {
 				Teams.teams.get(teamName).addBanner(block);
 			}
 		}
-		return false;
+		return true;
 	}
 }

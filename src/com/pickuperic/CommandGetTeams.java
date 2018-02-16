@@ -1,14 +1,13 @@
 package com.pickuperic;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import net.md_5.bungee.api.ChatColor;
 
-public class CommandGetTeams implements CommandExecutor {
+public class CommandGetTeams {
 	
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public static boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
 		String message = ChatColor.GREEN + "Current teams: ";
 		

@@ -39,6 +39,8 @@ public class Team {
 			this.bannerColor = DyeColor.valueOf(teamColor);
 		this.scoreboardTeam = sb.registerNewTeam(teamName.toUpperCase());
 		this.scoreboardTeam.setPrefix(getColor().toString());
+		System.out.println(ChatColor.GREEN + "Added team " + teamName);
+		
 	}
 	
 	public void addPlayer(Player player) {
@@ -47,6 +49,7 @@ public class Team {
 		player.sendMessage(ChatColor.GREEN + "You've been added to team " + printTeamName() + ChatColor.GREEN + ".");
 		scoreboardTeam.addEntry(player.getName());
 		player.setDisplayName(getColor() + player.getName() + ChatColor.RESET);
+		player.setPlayerListName(getColor() + player.getName() + ChatColor.RESET);
 		
 		for (String team : Teams.teams.keySet()) {
 			if (Teams.teams.get(team).containsPlayer(player) && !team.equals(this.teamName.toUpperCase())) {

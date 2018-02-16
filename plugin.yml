@@ -2,21 +2,6 @@ name: BaseCTF
 main: com.pickuperic.Main
 version: 1.0
 commands:
-  placeflag:
-    description: Places flag on player's location
-    usage: /placeflag
-  getflag:
-    description: Get location of specified team's flag
-    usage: /flag
-  setteam:
-    description: Sets the specified user's specified team
-    usage: /setteam
-  getteam:
-    description: Gets the team name of the specified user
-    usage: /getteam
-  addteam:
-    description: Adds a team
-    usage: /addteam
-  getteams:
-    description: List current teams
-    usage: /getteams
+  teams:
+    description: Teams
+    usage: /teams

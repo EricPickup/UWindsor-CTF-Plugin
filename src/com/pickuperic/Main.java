@@ -7,16 +7,12 @@ import org.bukkit.scoreboard.Scoreboard;
 
 public class Main extends JavaPlugin {
 	
+	public static Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
 	// Fired when first enabled
     @Override
     public void onEnable() {
-    	this.getCommand("placeflag").setExecutor(new CommandPlaceFlag());
-    	this.getCommand("getflag").setExecutor(new CommandGetFlag());
-    	this.getCommand("setteam").setExecutor(new CommandSetTeam());
-    	this.getCommand("getteam").setExecutor(new CommandGetTeam());
-    	this.getCommand("addteam").setExecutor(new CommandAddTeam());
-    	this.getCommand("getteams").setExecutor(new CommandGetTeams());
-    	
+    	this.getCommand("teams").setExecutor(new CommandHubTeams());
+
     	Teams.availableColors.add("RED");
 		Teams.availableColors.add("AQUA");
 		Teams.availableColors.add("GOLD");
@@ -29,11 +25,6 @@ public class Main extends JavaPlugin {
 		Teams.availableColors.add("WHITE");
 		System.out.println(Teams.availableColors);
 		
-		
-		
-		Teams.addTeam("BASE", "WHITE");
-		
-		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
 		for (org.bukkit.scoreboard.Team team : board.getTeams()) {
 			team.unregister();
 		}
@@ -45,10 +36,12 @@ public class Main extends JavaPlugin {
 			}
 		}
 		
+		Teams.addTeam("BASE", "WHITE");
 		
     	getServer().getPluginManager().registerEvents(new FlagBreakListener(), this);
     	getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
     	getServer().getPluginManager().registerEvents(new FlagIndirectBreakListener(), this);
+    	
     }
     // Fired when disabled
     @Override

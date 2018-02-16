@@ -1,16 +1,25 @@
 package com.pickuperic;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+
+import net.md_5.bungee.api.ChatColor;
 
 public class PlayerJoinListener implements Listener {
 	
 	@EventHandler
 	public void onJoin(PlayerJoinEvent event) {
 		
-		if (Teams.getPlayerTeam(event.getPlayer()) == null) {
-			Teams.teams.get("BASE").addPlayer(event.getPlayer());
+		Player player = event.getPlayer();
+		
+		if (Teams.getPlayerTeam(player) == null) {
+			Teams.teams.get("BASE").addPlayer(player);
+		} else {
+			//Re-assigning display/list name since bukkit does not save these
+			player.setDisplayName(Teams.teams.get(Teams.getPlayerTeam(player)).getColor() + player.getName() + ChatColor.RESET);
+			player.setPlayerListName(Teams.teams.get(Teams.getPlayerTeam(player)).getColor() + player.getName() + ChatColor.RESET);
 		}
 		
 	}

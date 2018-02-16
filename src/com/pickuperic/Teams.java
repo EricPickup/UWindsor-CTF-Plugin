@@ -44,6 +44,7 @@ public class Teams {
 	public static String getPlayerTeam(Player player) {
 		for (Team team : teams.values()) {
 			if (team.containsPlayer(player)) {
+				System.out.println("Returning " + team.getName().toUpperCase());
 				return team.getName().toUpperCase();
 			}
 		}

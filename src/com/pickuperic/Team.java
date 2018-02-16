@@ -45,25 +45,29 @@ public class Team {
 	
 	public void addPlayer(Player player) {
 		
-		members.add(player.getName());
-		player.sendMessage(ChatColor.GREEN + "You've been added to team " + printTeamName() + ChatColor.GREEN + ".");
-		scoreboardTeam.addEntry(player.getName());
-		player.setDisplayName(getColor() + player.getName() + ChatColor.RESET);
-		player.setPlayerListName(getColor() + player.getName() + ChatColor.RESET);
-		
+		//Removing player from all other teams
 		for (String team : Teams.teams.keySet()) {
 			if (Teams.teams.get(team).containsPlayer(player) && !team.equals(this.teamName.toUpperCase())) {
 				System.out.println(team + " != " + this.teamName.toUpperCase());
 				Teams.teams.get(team).removePlayer(player);
 			}
 		}
+		
+		members.add(player.getName());
+		player.sendMessage(ChatColor.GREEN + "You've been added to team " + printTeamName() + ChatColor.GREEN + ".");
+		scoreboardTeam.addEntry(player.getName());
+		player.setDisplayName(getColor() + player.getName() + ChatColor.RESET);
+		player.setPlayerListName(getColor() + player.getName() + ChatColor.RESET);
 	}
 	
 	public void removePlayer(Player player) {
-		members.remove(player.getName());
-		player.sendMessage(ChatColor.GREEN + "You've been removed from team " + ChatColor.valueOf(teamColor) + ChatColor.BOLD + teamName + 
-				ChatColor.RESET + ChatColor.GREEN + ".");
-		scoreboardTeam.removeEntry(player.getName());
+		if (members.remove(player.getName())) {	//If the player was successfully removed
+			player.sendMessage(ChatColor.GREEN + "You've been removed from team " + ChatColor.valueOf(teamColor) + ChatColor.BOLD + teamName + 
+			ChatColor.RESET + ChatColor.GREEN + ".");
+			scoreboardTeam.removeEntry(player.getName());
+			player.setDisplayName(player.getName());
+			player.setPlayerListName(player.getName());
+		}
 	}
 	
 	public void addBanner(Block bannerBlock) {

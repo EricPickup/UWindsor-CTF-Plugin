@@ -25,6 +25,7 @@ public class CommandHubTeams implements CommandExecutor {
 				CommandSetTeam.onCommand(sender, command, label, args);
 			} else if (args[0].equalsIgnoreCase("remove")) {	//	/teams remove <player> <fromTeam>
 				//remove player from team
+				CommandRemovePlayer.onCommand(sender, command, label, args);
 			} else if (args[0].equalsIgnoreCase("get")) {	//	/teams get <player>
 				//get user's team
 				CommandGetTeam.onCommand(sender, command, label, args);
@@ -36,6 +37,8 @@ public class CommandHubTeams implements CommandExecutor {
 			} else if (args[0].equalsIgnoreCase("setflag")) {	//	/teams setflag <team>
 				//sets flag location for team
 				CommandSetFlag.onCommand(sender, command, label, args);
+			} else if (args[0].equalsIgnoreCase("help")) {
+				sender.sendMessage(helpMessage());
 			}
 		}
 		

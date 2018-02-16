@@ -7,12 +7,12 @@ import org.bukkit.scoreboard.Scoreboard;
 
 public class Main extends JavaPlugin {
 	
-	public static Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
+	public static Scoreboard board;
 	// Fired when first enabled
     @Override
     public void onEnable() {
     	this.getCommand("teams").setExecutor(new CommandHubTeams());
-
+    	board = Bukkit.getScoreboardManager().getMainScoreboard();
     	Teams.availableColors.add("RED");
 		Teams.availableColors.add("AQUA");
 		Teams.availableColors.add("GOLD");
@@ -41,6 +41,7 @@ public class Main extends JavaPlugin {
     	getServer().getPluginManager().registerEvents(new FlagBreakListener(), this);
     	getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
     	getServer().getPluginManager().registerEvents(new FlagIndirectBreakListener(), this);
+    	getServer().getPluginManager().registerEvents(new PlayerDamageListener(), this);
     	
     }
     // Fired when disabled

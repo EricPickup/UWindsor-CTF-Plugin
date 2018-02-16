@@ -109,7 +109,7 @@ public class Team {
 	}
 	
 	public String printTeamName() {
-		return ("" + getColor() + ChatColor.BOLD + ChatColor.RESET);
+		return ("" + getColor() + ChatColor.BOLD + this.teamName + ChatColor.RESET);
 	}
 	
 	public Block getBannerBlock() {

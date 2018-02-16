@@ -17,3 +17,6 @@ commands:
   addteam:
     description: Adds a team
     usage: /addteam
+  getteams:
+    description: List current teams
+    usage: /getteams

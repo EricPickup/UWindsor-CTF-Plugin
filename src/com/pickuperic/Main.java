@@ -15,6 +15,7 @@ public class Main extends JavaPlugin {
     	this.getCommand("setteam").setExecutor(new CommandSetTeam());
     	this.getCommand("getteam").setExecutor(new CommandGetTeam());
     	this.getCommand("addteam").setExecutor(new CommandAddTeam());
+    	this.getCommand("getteams").setExecutor(new CommandGetTeams());
     	
     	Teams.availableColors.add("RED");
 		Teams.availableColors.add("AQUA");

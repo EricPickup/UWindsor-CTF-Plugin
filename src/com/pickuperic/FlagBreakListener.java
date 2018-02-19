@@ -21,30 +21,37 @@ public class FlagBreakListener implements Listener {
 		
 		if (eventBlock.getType() == Material.STANDING_BANNER) {	//If banner is destroyed
 			
-			event.getBlock().getDrops().clear();
-			
-			for (String team : Teams.teams.keySet()) {	
+			for (String team : Teams.teams.keySet()) {		//For each team
 				
-				if (eventBlock.equals(Teams.teams.get(team).getBannerBlock())) {
+				Team victimTeam = Teams.teams.get(team);
+				
+				if (eventBlock.equals(victimTeam.getBannerBlock())) {			//IF FLAG BROKEN IS THE TEAM'S MAIN FLAG (FROM THEIR BASE)
 					
 					Player player = event.getPlayer();
 					
-					if (Teams.teams.get(team).containsPlayer(player)) {
-						
+					if (victimTeam.containsPlayer(player)) {		//If breaker is breaking their own flag
+					
 						event.setCancelled(true);
 						player.sendMessage(ChatColor.RED + "You cannot break your own flag!");
-					} else if (player.getInventory().firstEmpty() == -1) {
+						
+					} else if (player.getInventory().firstEmpty() == -1) {		//If breaker has no space in their inventory
+						
 						player.sendMessage(ChatColor.RED + "YOU HAVE NO SPACE IN YOUR INVENTORY TO HOLD THE FLAG!!!");	
 						event.setCancelled(true);
+						
 					} else {
+						
+						//Cannot alter drops from BlockBreakEvent, so to prevent the flag entity from dropping, cancel the block break and set block to air instead
+						event.setCancelled(true);	
+						eventBlock.setType(Material.AIR);
+						
 						ChatColor playerColor;
-						if (Teams.getPlayerTeam(player) == null) {	//Player is not part of team, set chat color to white
+						if (Teams.getPlayerTeam(player) == null) {	//Player is not part of team, set their chat color to white
 							playerColor = ChatColor.WHITE;
 						} else {
 							playerColor = Teams.getPlayerColor(player);
 						}
 						
-						Team victimTeam = Teams.teams.get(team);
 						
 						Bukkit.broadcastMessage(ChatColor.DARK_RED + "=====================================================");
 						Bukkit.broadcastMessage(ChatColor.GREEN + "TEAM " + victimTeam.printTeamName() + ChatColor.GREEN + 
@@ -63,23 +70,29 @@ public class FlagBreakListener implements Listener {
 						m.setDisplayName(victimTeam.getColor() + team + "'S FLAG");
 						i.setItemMeta(m);
 						
-						player.getInventory().addItem(i);
+						//Replacing held item slot with flag
+						player.getInventory().addItem(player.getItemInHand());
 						player.setItemInHand(i);
-						Teams.carriers.put(player, Teams.teams.get(team));
+						Teams.carriers.put(player, victimTeam);
 				
 					}
-				} else if (eventBlock.equals(Teams.teams.get(team).getStolenBanner())) {		//If broken flag is a stolen (temporarily placed flag)
+				} else if (eventBlock.equals(victimTeam.getStolenBanner())) {		//IF FLAG BROKEN IS THE TEAM'S TEMPORARY FLAG (already stolen, carrier was killed so flag is dropped on their body for 30s)
 					
 					Player player = event.getPlayer();
 					
-					if (Teams.teams.get(team).containsPlayer(player)) {
+					if (victimTeam.containsPlayer(player)) {
 						
 						event.setCancelled(true);
 						player.sendMessage(ChatColor.RED + "You cannot break your own flag!");
+						
 					} else if (player.getInventory().firstEmpty() == -1) {
 						player.sendMessage(ChatColor.RED + "YOU HAVE NO SPACE IN YOUR INVENTORY TO HOLD THE FLAG!!!");
 						event.setCancelled(true);
 					} else {
+						
+						//Cannot alter drops from BlockBreakEvent, so to prevent the flag entity from dropping, cancel the block break and set block to air instead
+						event.setCancelled(true);	
+						eventBlock.setType(Material.AIR);
 						
 						ChatColor playerColor;
 						if (Teams.getPlayerTeam(player) == null) {	//Player is not part of team, set chat color to white
@@ -87,8 +100,6 @@ public class FlagBreakListener implements Listener {
 						} else {
 							playerColor = Teams.getPlayerColor(player);
 						}
-						
-						Team victimTeam = Teams.teams.get(team);
 
 						Bukkit.broadcastMessage(ChatColor.DARK_RED + "=====================================================");
 						Bukkit.broadcastMessage(ChatColor.GREEN + "TEAM " + victimTeam.printTeamName() + ChatColor.GREEN + 
@@ -103,9 +114,10 @@ public class FlagBreakListener implements Listener {
 						m.setDisplayName(victimTeam.getColor() + team + "'S FLAG");
 						i.setItemMeta(m);
 						
-						player.getInventory().setHeldItemSlot(player.getInventory().firstEmpty());
-						player.getInventory().addItem(i);
-						Teams.carriers.put(player, Teams.teams.get(team));
+						//Replacing held item slot with flag
+						player.getInventory().addItem(player.getItemInHand());
+						player.setItemInHand(i);
+						Teams.carriers.put(player, victimTeam);
 					}
 					
 				}

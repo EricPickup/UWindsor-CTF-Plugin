@@ -27,17 +27,15 @@ import net.md_5.bungee.api.ChatColor;
 
 public class CarrierListeners implements Listener {
 
-	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onMove(PlayerMoveEvent event) {
 		
 		Player player = event.getPlayer();
 		
 		if (Teams.carriers.containsKey(player)) {
-			player.getLocation().getWorld().playEffect(player.getLocation(), Effect.COLOURED_DUST, 200);
+			player.getLocation().getWorld().playEffect(player.getLocation(), Effect.COLOURED_DUST, 10);
 			Location abovePlayer = new Location(player.getWorld(),player.getLocation().getX(), player.getLocation().getY() + 1, player.getLocation().getZ());
-			abovePlayer.getWorld().playEffect(abovePlayer, Effect.COLOURED_DUST, 200);
-			player.playEffect(abovePlayer, Effect.COLOURED_DUST, 200);
+			abovePlayer.getWorld().playEffect(abovePlayer, Effect.COLOURED_DUST, 10);
 			double distance = player.getLocation().distance(Teams.teams.get(Teams.getPlayerTeam(player)).getBannerSpawn());
 			if (distance < 5) {
 				Teams.carriers.get(player).restoreBanner();
@@ -45,6 +43,7 @@ public class CarrierListeners implements Listener {
 				Bukkit.broadcastMessage(ChatColor.GREEN + "Player " + Teams.getPlayerColor(player) + player.getName() + ChatColor.GREEN + " captured " +
 						Teams.carriers.get(player).printTeamName() + ChatColor.GREEN + "'s flag and scored a point! Returning flag to base.");
 				Bukkit.broadcastMessage(ChatColor.AQUA + "=====================================================");
+				Safezones.addTeam(Teams.carriers.get(player));
 				player.getInventory().remove(Material.BANNER);
 				Teams.carriers.remove(player);
 			}

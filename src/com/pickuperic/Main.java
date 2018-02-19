@@ -47,6 +47,7 @@ public class Main extends JavaPlugin {
     	getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
     	getServer().getPluginManager().registerEvents(new FlagIndirectBreakListener(), this);
     	getServer().getPluginManager().registerEvents(new PlayerDamageListener(), this);
+    	getServer().getPluginManager().registerEvents(new CarrierListeners(), this);
     	
     }
     // Fired when disabled

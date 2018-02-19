@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Banner;
@@ -19,7 +20,9 @@ public class Team {
 	private String teamColor;
 	public ArrayList<String> members = new ArrayList<String>();
 	private Block bannerBlock;
+	private Block stolenBannerBlock;
 	private DyeColor bannerColor;
+	private Location tempBannerLocation;	//Needed to restore banner
 	public static Scoreboard sb = Bukkit.getScoreboardManager().getMainScoreboard();
 	private org.bukkit.scoreboard.Team scoreboardTeam;
 	
@@ -88,6 +91,32 @@ public class Team {
 		} else {
 			this.bannerBlock = bannerBlock;
 		}
+		this.tempBannerLocation = bannerBlock.getLocation();
+	}
+	
+	public void addStolenBanner(Block bannerBlock) {	//Temp banner is when banner is captured and the capturer is killed
+		this.stolenBannerBlock = bannerBlock;
+	}
+	
+	public Block getStolenBanner() {
+		return this.stolenBannerBlock;
+	}
+	
+	public void removeStolenBanner() {
+		stolenBannerBlock.setType(Material.AIR);
+		this.stolenBannerBlock = null;
+		
+	}
+	
+	public void restoreBanner() {
+		removeStolenBanner();
+		World w = Bukkit.getServer().getWorlds().get(0);
+		Block block = w.getBlockAt(this.tempBannerLocation);
+		block.setType(Material.STANDING_BANNER);
+		Banner banner = (Banner) block.getState();
+		banner.setBaseColor(getBannerColor());
+		banner.update();
+		addBanner(block);
 	}
 	
 	public void addBannerByCoords(String[] coords) {

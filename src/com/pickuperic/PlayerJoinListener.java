@@ -14,9 +14,7 @@ public class PlayerJoinListener implements Listener {
 		
 		Player player = event.getPlayer();
 		
-		if (Teams.getPlayerTeam(player) == null) {
-			Teams.teams.get("BASE").addPlayer(player);
-		} else {
+		if (Teams.getPlayerTeam(player) != null) {
 			//Re-assigning display/list name since bukkit does not save these
 			player.setDisplayName(Teams.teams.get(Teams.getPlayerTeam(player)).getColor() + player.getName() + ChatColor.RESET);
 			player.setPlayerListName(Teams.teams.get(Teams.getPlayerTeam(player)).getColor() + player.getName() + ChatColor.RESET);

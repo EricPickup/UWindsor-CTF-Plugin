@@ -10,7 +10,7 @@ import net.md_5.bungee.api.ChatColor;
 
 public class Teams {
 	
-	public static HashMap<String, Team> teams = new HashMap<String, Team>();
+	public static HashMap<String, Team> teams = new HashMap<String, Team>();	//Key: TeamName, Value: TeamObject
 	static ArrayList<String> availableColors = new ArrayList<String>();
 	
 	

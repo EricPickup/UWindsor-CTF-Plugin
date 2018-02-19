@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
@@ -15,7 +17,7 @@ public class Team {
 	
 	private String teamName;
 	private String teamColor;
-	private ArrayList<String> members = new ArrayList<String>();
+	public ArrayList<String> members = new ArrayList<String>();
 	private Block bannerBlock;
 	private DyeColor bannerColor;
 	public static Scoreboard sb = Bukkit.getScoreboardManager().getMainScoreboard();
@@ -40,7 +42,7 @@ public class Team {
 		this.scoreboardTeam = sb.registerNewTeam(teamName.toUpperCase());
 		this.scoreboardTeam.setPrefix(getColor().toString());
 		System.out.println(ChatColor.GREEN + "Added team " + teamName);
-		
+
 	}
 	
 	public void addPlayer(Player player) {
@@ -60,6 +62,16 @@ public class Team {
 		player.setPlayerListName(getColor() + player.getName() + ChatColor.RESET);
 	}
 	
+	public void addPlayerByName(String playerName) {
+		members.add(playerName);
+		Player player = Bukkit.getServer().getPlayerExact(playerName);
+		if (player != null) {
+			scoreboardTeam.addEntry(player.getName());
+			player.setDisplayName(getColor() + player.getName() + ChatColor.RESET);
+			player.setPlayerListName(getColor() + player.getName() + ChatColor.RESET);
+		}
+	}
+	
 	public void removePlayer(Player player) {
 		if (members.remove(player.getName())) {	//If the player was successfully removed
 			player.sendMessage(ChatColor.GREEN + "You've been removed from team " + ChatColor.valueOf(teamColor) + ChatColor.BOLD + teamName + 
@@ -75,6 +87,20 @@ public class Team {
 			removeBanner();
 		} else {
 			this.bannerBlock = bannerBlock;
+		}
+	}
+	
+	public void addBannerByCoords(String[] coords) {
+		if (this.bannerBlock != null) {
+			removeBanner();
+		} else {
+			World w = Bukkit.getServer().getWorlds().get(0);
+			Block block = w.getBlockAt(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]), Integer.parseInt(coords[2]));
+			block.setType(Material.STANDING_BANNER);
+			Banner banner = (Banner) block.getState();
+			banner.setBaseColor(getBannerColor());
+			banner.update();
+			this.bannerBlock = block;
 		}
 	}
 	
@@ -103,6 +129,10 @@ public class Team {
 		return ChatColor.valueOf(teamColor);
 	}
 	
+	public String getColorString() {
+		return this.teamColor;
+	}
+	
 	public String getName() {
 		return teamName;
 	}
@@ -115,12 +145,33 @@ public class Team {
 		}
 	}
 	
+	public String getBannerCoordinatesConfig() {
+		if (bannerBlock == null) {
+			return null;
+		} else {
+			return (bannerBlock.getX() + " " + bannerBlock.getY() + " " + bannerBlock.getZ());
+		}
+	}
+	
 	public String printTeamName() {
 		return ("" + getColor() + ChatColor.BOLD + this.teamName + ChatColor.RESET);
 	}
 	
 	public Block getBannerBlock() {
 		return bannerBlock;
+	}
+	
+	public void purge() {
+		Player player;
+		for (String playerName : members) {
+			player = Bukkit.getServer().getPlayerExact(playerName);
+			if (player != null) {
+				player.sendMessage(ChatColor.GREEN + "You've been removed from team " + printTeamName() + ChatColor.GREEN + ".");
+				scoreboardTeam.removeEntry(player.getName());
+				player.setDisplayName(player.getName());
+				player.setPlayerListName(player.getName());
+			}
+		}
 	}
 	
 }

@@ -39,6 +39,8 @@ public class CommandHubTeams implements CommandExecutor {
 				CommandSetFlag.onCommand(sender, command, label, args);
 			} else if (args[0].equalsIgnoreCase("help")) {
 				sender.sendMessage(helpMessage());
+			} else if (args[0].equalsIgnoreCase("delete")) {
+				CommandDeleteTeam.onCommand(sender, command, label, args);
 			}
 		}
 		
@@ -53,6 +55,7 @@ public class CommandHubTeams implements CommandExecutor {
 		message += "\nCommands:";
 		message += "\n" + ChatColor.AQUA + "/teams help" + ChatColor.GREEN + " - list help menu for plugin";
 		message += "\n" + ChatColor.AQUA + "/teams create <teamName> <teamColor>" + ChatColor.GREEN + " - create new a team with the specified name/color";
+		message += "\n" + ChatColor.AQUA + "/teams delete <teamName>" + ChatColor.GREEN + " - delete a team completely (removes members as well)";
 		message += "\n" + ChatColor.AQUA + "/teams list" + ChatColor.GREEN + " - lists all of the current teams";
 		message += "\n" + ChatColor.AQUA + "/teams add/remove <player> <team>" + ChatColor.GREEN + " - add/remove user to/from specified team";
 		message += "\n" + ChatColor.AQUA + "/teams setFlag <teamName>" + ChatColor.GREEN + " - set the location of the specified team's flag";

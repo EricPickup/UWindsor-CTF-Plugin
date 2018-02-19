@@ -22,9 +22,11 @@ public class Team {
 	private Block bannerBlock;
 	private Block stolenBannerBlock;
 	private DyeColor bannerColor;
-	private Location tempBannerLocation;	//Needed to restore banner
+	private Location bannerSpawnLocation;	//Needed to restore banner
 	public static Scoreboard sb = Bukkit.getScoreboardManager().getMainScoreboard();
 	private org.bukkit.scoreboard.Team scoreboardTeam;
+	private boolean flagStolen;
+	private int score;
 	
 	public Team (String teamName, String teamColor) {
 		
@@ -44,7 +46,11 @@ public class Team {
 			this.bannerColor = DyeColor.valueOf(teamColor);
 		this.scoreboardTeam = sb.registerNewTeam(teamName.toUpperCase());
 		this.scoreboardTeam.setPrefix(getColor().toString());
+		flagStolen = false;
 		System.out.println(ChatColor.GREEN + "Added team " + teamName);
+		World w = Bukkit.getServer().getWorlds().get(0);
+		this.bannerSpawnLocation = new Location(w,0,0,0);
+		this.score = 0;
 
 	}
 	
@@ -86,12 +92,10 @@ public class Team {
 	}
 	
 	public void addBanner(Block bannerBlock) {
-		if (this.bannerBlock != null) {
-			removeBanner();
-		} else {
+		
 			this.bannerBlock = bannerBlock;
-		}
-		this.tempBannerLocation = bannerBlock.getLocation();
+			this.bannerSpawnLocation = bannerBlock.getLocation();
+		
 	}
 	
 	public void addStolenBanner(Block bannerBlock) {	//Temp banner is when banner is captured and the capturer is killed
@@ -103,20 +107,35 @@ public class Team {
 	}
 	
 	public void removeStolenBanner() {
-		stolenBannerBlock.setType(Material.AIR);
-		this.stolenBannerBlock = null;
-		
+		if (stolenBannerBlock != null) {
+			stolenBannerBlock.setType(Material.AIR);
+			this.stolenBannerBlock = null;
+		}
+	}
+
+	public void setStolenStatus(boolean status) {
+		this.flagStolen = status;
+	}
+	
+	public boolean getStolenStatus() {
+		return this.flagStolen;
+	}
+	
+	public Location getBannerSpawn() {
+		return this.bannerSpawnLocation;
 	}
 	
 	public void restoreBanner() {
 		removeStolenBanner();
 		World w = Bukkit.getServer().getWorlds().get(0);
-		Block block = w.getBlockAt(this.tempBannerLocation);
+		Block block = w.getBlockAt(this.bannerSpawnLocation);
 		block.setType(Material.STANDING_BANNER);
 		Banner banner = (Banner) block.getState();
 		banner.setBaseColor(getBannerColor());
 		banner.update();
 		addBanner(block);
+		flagStolen = false;
+		System.out.println("Restored " + getName() + " banner at " + this.bannerSpawnLocation);
 	}
 	
 	public void addBannerByCoords(String[] coords) {
@@ -130,6 +149,7 @@ public class Team {
 			banner.setBaseColor(getBannerColor());
 			banner.update();
 			this.bannerBlock = block;
+			this.bannerSpawnLocation = bannerBlock.getLocation();
 		}
 	}
 	
@@ -178,7 +198,7 @@ public class Team {
 		if (bannerBlock == null) {
 			return null;
 		} else {
-			return (bannerBlock.getX() + " " + bannerBlock.getY() + " " + bannerBlock.getZ());
+			return (this.bannerSpawnLocation.getBlockX() + " " + this.bannerSpawnLocation.getBlockY() + " " + this.bannerSpawnLocation.getBlockZ());
 		}
 	}
 	
@@ -200,6 +220,10 @@ public class Team {
 				player.setDisplayName(player.getName());
 				player.setPlayerListName(player.getName());
 			}
+		}
+		if (this.bannerBlock != null) {
+			this.bannerBlock.setType(Material.AIR);
+			this.bannerBlock = null;
 		}
 	}
 	

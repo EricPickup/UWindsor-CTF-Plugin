@@ -13,9 +13,12 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -24,15 +27,27 @@ import net.md_5.bungee.api.ChatColor;
 
 public class CarrierListeners implements Listener {
 
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onMove(PlayerMoveEvent event) {
 		
 		Player player = event.getPlayer();
 		
 		if (Teams.carriers.containsKey(player)) {
-			player.playEffect(player.getLocation(), Effect.COLOURED_DUST, 200);
+			player.getLocation().getWorld().playEffect(player.getLocation(), Effect.COLOURED_DUST, 200);
 			Location abovePlayer = new Location(player.getWorld(),player.getLocation().getX(), player.getLocation().getY() + 1, player.getLocation().getZ());
+			abovePlayer.getWorld().playEffect(abovePlayer, Effect.COLOURED_DUST, 200);
 			player.playEffect(abovePlayer, Effect.COLOURED_DUST, 200);
+			double distance = player.getLocation().distance(Teams.teams.get(Teams.getPlayerTeam(player)).getBannerSpawn());
+			if (distance < 5) {
+				Teams.carriers.get(player).restoreBanner();
+				Bukkit.broadcastMessage(ChatColor.AQUA + "=====================================================");
+				Bukkit.broadcastMessage(ChatColor.GREEN + "Player " + Teams.getPlayerColor(player) + player.getName() + ChatColor.GREEN + " captured " +
+						Teams.carriers.get(player).printTeamName() + ChatColor.GREEN + "'s flag and scored a point! Returning flag to base.");
+				Bukkit.broadcastMessage(ChatColor.AQUA + "=====================================================");
+				player.getInventory().remove(Material.BANNER);
+				Teams.carriers.remove(player);
+			}
 		}
 	}
 	
@@ -64,6 +79,7 @@ public class CarrierListeners implements Listener {
 			
 			Teams.carriers.remove(event.getEntity());	//Remove user from list of carriers
 			
+			//Wait 30s, check if flag is still there, if so, restore it to base
 			BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 			scheduler.scheduleSyncDelayedTask(JavaPlugin.getPlugin(Main.class), new Runnable() {
 				@Override
@@ -76,7 +92,7 @@ public class CarrierListeners implements Listener {
 						Bukkit.broadcastMessage(ChatColor.AQUA + "=====================================================");
 					}
 				}
-			}, 200L);
+			}, 600L);
 		}
 	}
 	
@@ -85,6 +101,29 @@ public class CarrierListeners implements Listener {
 		if (event.getItemDrop().getItemStack().getType().equals(Material.BANNER)) {
 			event.setCancelled(true);
 			event.getPlayer().sendMessage(ChatColor.RED + "You cannot drop the flag!");
+		}
+	}
+	
+	@EventHandler
+	public void place(BlockPlaceEvent event) {
+		if (event.getBlock().getType().equals(Material.STANDING_BANNER) || event.getBlock().getType().equals(Material.WALL_BANNER)) {
+			event.setCancelled(true);
+			event.getPlayer().sendMessage(ChatColor.RED + "You cannot place banners manually!");
+		}
+	}
+	
+	@EventHandler
+	public void onDisconnect(PlayerQuitEvent event) {
+		if(Teams.carriers.containsKey(event.getPlayer())) { 	//If disconnected player had the flag
+			event.getPlayer().setHealth(0);
+			Teams.carriers.remove(event.getPlayer());
+		}
+	}
+	
+	@EventHandler
+	public void onHeld(PlayerItemHeldEvent event) {
+		if (Teams.carriers.containsKey(event.getPlayer())) {
+			event.setCancelled(true);
 		}
 	}
 }

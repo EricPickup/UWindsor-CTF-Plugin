@@ -31,7 +31,8 @@ public class CommandSetFlag {
 			
 			} else if (!Teams.containsTeam(teamName)) {
 				player.sendMessage(ChatColor.RED + "Invalid team name! Choose from: " + String.join(", ", Teams.teams.keySet()));
-				
+			} else if (Teams.teams.get(teamName).getStolenStatus() == true) {
+				player.sendMessage(ChatColor.RED + "You cannot place your flag while it is stolen!");
 			} else {
 				if (Teams.teams.get(teamName).hasBanner()) {
 					player.sendMessage(ChatColor.GREEN + "Removed previously saved flag at location " + Teams.teams.get(teamName).getBannerCoordinates());

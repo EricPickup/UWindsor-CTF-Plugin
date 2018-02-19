@@ -1,9 +1,12 @@
 package com.pickuperic;
 
+import java.util.Iterator;
 import java.util.List;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
 
@@ -40,6 +43,7 @@ public class Main extends JavaPlugin {
 		}
 		
 		loadConfiguration();
+		
     	ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
     	console.sendMessage("[BaseCTF] Loaded config");
 		
@@ -48,6 +52,18 @@ public class Main extends JavaPlugin {
     	getServer().getPluginManager().registerEvents(new FlagIndirectBreakListener(), this);
     	getServer().getPluginManager().registerEvents(new PlayerDamageListener(), this);
     	getServer().getPluginManager().registerEvents(new CarrierListeners(), this);
+    	
+    	
+    	Iterator<Recipe> it = getServer().recipeIterator();
+        Recipe recipe;
+        while(it.hasNext())
+        {
+            recipe = it.next();
+            if (recipe != null && recipe.getResult().getType() == Material.BANNER)
+            {
+                it.remove();
+            }
+        }
     	
     }
     // Fired when disabled
@@ -77,6 +93,8 @@ public class Main extends JavaPlugin {
         	if (!getConfig().getString(path + ".bannerLocation").equals("null")) {	//If they have a banner placed
         		String[] coords = getConfig().getString(path + ".bannerLocation").split("\\s+");
         		Teams.teams.get(team).addBannerByCoords(coords);
+        	} else {
+        		System.out.println("Banner location null");
         	}
         }
        

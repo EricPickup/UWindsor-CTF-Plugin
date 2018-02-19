@@ -26,6 +26,8 @@ public class CommandDeleteTeam {
 			
 			String teamChatName = Teams.teams.get(Teams.getPlayerTeam(player)).printTeamName();
 			String deleteTeam = Teams.getPlayerTeam(player);
+			Teams.availableColors.add(Teams.teams.get(deleteTeam).getColorString());
+			System.out.println("Added " +Teams.teams.get(deleteTeam).getColorString() );
 			Teams.teams.get(deleteTeam).purge();
 			Teams.teams.remove(deleteTeam);
 			player.sendMessage(ChatColor.GREEN + "Removed team " + teamChatName);
@@ -38,10 +40,10 @@ public class CommandDeleteTeam {
 			
 			String deleteTeam = args[1].toUpperCase();
 			String teamChatName = Teams.teams.get(deleteTeam).printTeamName();
+			Teams.availableColors.add(Teams.teams.get(deleteTeam).getColorString());
 			Teams.teams.get(deleteTeam).purge();
 			Teams.teams.remove(deleteTeam);
 			player.sendMessage(ChatColor.GREEN + "Removed team " + teamChatName);
-			
 		}
 		
 		

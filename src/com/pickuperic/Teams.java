@@ -25,6 +25,7 @@ public class Teams {
 			return false;
 		} else {
 			teams.put(teamName.toUpperCase(), new Team(teamName, teamColor));
+			availableColors.remove(teamColor);
 			return true;
 		}
 	}
@@ -33,24 +34,15 @@ public class Teams {
 		return teams.containsKey(teamName.toUpperCase());
 	}
 	
-	public static boolean removeTeam(String teamName) {
-		teamName = teamName.toUpperCase();
-		if (containsTeam(teamName)) {
-			teams.remove(teamName);
-			return true;
-		}
-		return false;
-	}
-	
 	public static String getPlayerTeam(Player player) {
 		for (Team team : teams.values()) {
 			if (team.containsPlayer(player)) {
-				System.out.println("Returning " + team.getName().toUpperCase());
 				return team.getName().toUpperCase();
 			}
 		}
 		return null;
 	}
+	
 	
 	public static ChatColor getPlayerColor(Player player) {
 		return Teams.teams.get(getPlayerTeam(player).toUpperCase()).getColor();

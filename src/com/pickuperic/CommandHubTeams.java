@@ -3,6 +3,7 @@ package com.pickuperic;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -16,16 +17,28 @@ public class CommandHubTeams implements CommandExecutor {
 			sender.sendMessage(helpMessage());
 		} else {
 			if (args[0].equalsIgnoreCase("create")) {	//	/teams create <teamName> <teamColor>
-				CommandAddTeam.onCommand(sender, command, label, args);
+				if (sender.isOp()) {
+					CommandAddTeam.onCommand(sender, command, label, args);
+				} else {
+					denyPermissions(sender);
+				}
 			} else if (args[0].equalsIgnoreCase("list")) {	//	/teams list
 				//list teams
 				CommandGetTeams.onCommand(sender, command, label, args);
 			} else if (args[0].equalsIgnoreCase("add")) {	//	/teams add <player> <toTeam>
 				//add player to team
-				CommandSetTeam.onCommand(sender, command, label, args);
+				if (sender.isOp()) {
+					CommandSetTeam.onCommand(sender, command, label, args);
+				} else {
+					denyPermissions(sender);
+				}
 			} else if (args[0].equalsIgnoreCase("remove")) {	//	/teams remove <player> <fromTeam>
 				//remove player from team
-				CommandRemovePlayer.onCommand(sender, command, label, args);
+				if (sender.isOp()) {
+					CommandRemovePlayer.onCommand(sender, command, label, args);
+				} else {
+					denyPermissions(sender);
+				}
 			} else if (args[0].equalsIgnoreCase("get")) {	//	/teams get <player>
 				//get user's team
 				CommandGetTeam.onCommand(sender, command, label, args);
@@ -33,14 +46,24 @@ public class CommandHubTeams implements CommandExecutor {
 				//list team's users
 			} else if (args[0].equalsIgnoreCase("getflag")) {	//	/teams getflag <team>
 				//get flag location
-				CommandGetFlag.onCommand(sender, command, label, args);
+				if (sender.isOp()) {
+					CommandGetFlag.onCommand(sender, command, label, args);
+				} else {
+					denyPermissions(sender);
+				}
 			} else if (args[0].equalsIgnoreCase("setflag")) {	//	/teams setflag <team>
 				//sets flag location for team
 				CommandSetFlag.onCommand(sender, command, label, args);
 			} else if (args[0].equalsIgnoreCase("help")) {
 				sender.sendMessage(helpMessage());
 			} else if (args[0].equalsIgnoreCase("delete")) {
-				CommandDeleteTeam.onCommand(sender, command, label, args);
+				if (sender.isOp()) {
+					CommandDeleteTeam.onCommand(sender, command, label, args);
+				} else {
+					denyPermissions(sender);
+				}
+			} else if (args[0].equalsIgnoreCase("home")) {
+				CommandHome.onCommand(sender, command, label, args);
 			}
 		}
 		
@@ -64,5 +87,9 @@ public class CommandHubTeams implements CommandExecutor {
 		message += "\n" + ChatColor.AQUA + "/teams info <teamName>" + ChatColor.GREEN + " - list info about the specified team";
 		message += "\n=====================================";
 		return message;
+	}
+	
+	public void denyPermissions(CommandSender sender) {
+		sender.sendMessage(ChatColor.RED + "You do not have permission to do that!");
 	}
 }

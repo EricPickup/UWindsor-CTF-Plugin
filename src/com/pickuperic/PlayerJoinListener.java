@@ -13,6 +13,7 @@ public class PlayerJoinListener implements Listener {
 	public void onJoin(PlayerJoinEvent event) {
 		
 		Player player = event.getPlayer();
+		player.setScoreboard(Main.board);
 		
 		if (Teams.getPlayerTeam(player) != null) {
 			//Re-assigning display/list name since bukkit does not save these

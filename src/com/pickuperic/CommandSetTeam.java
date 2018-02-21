@@ -25,6 +25,7 @@ public class CommandSetTeam {
 			} else if (!Teams.containsTeam(team)) {
 				sender.sendMessage(ChatColor.RED + "Invalid team name. Please choose from: " + String.join(", ", Teams.teams.keySet()));
 			} else {
+				Teams.purgePayer(player);//Remove player from all other teams
 				Teams.teams.get(team.toUpperCase()).addPlayer(player);
 				sender.sendMessage(ChatColor.GREEN + "Successfully added " + player.getDisplayName() + ChatColor.GREEN + " to team " + Teams.teams.get(team.toUpperCase()).printTeamName() + ChatColor.GREEN + ".");
 			}

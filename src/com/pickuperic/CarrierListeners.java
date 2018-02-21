@@ -15,6 +15,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryEvent;
+import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -33,19 +36,24 @@ public class CarrierListeners implements Listener {
 		Player player = event.getPlayer();
 		
 		if (Teams.carriers.containsKey(player)) {
+			
 			player.getLocation().getWorld().playEffect(player.getLocation(), Effect.COLOURED_DUST, 10);
 			Location abovePlayer = new Location(player.getWorld(),player.getLocation().getX(), player.getLocation().getY() + 1, player.getLocation().getZ());
 			abovePlayer.getWorld().playEffect(abovePlayer, Effect.COLOURED_DUST, 10);
-			double distance = player.getLocation().distance(Teams.teams.get(Teams.getPlayerTeam(player)).getBannerSpawn());
-			if (distance < 5) {
-				Teams.carriers.get(player).restoreBanner();
-				Bukkit.broadcastMessage(ChatColor.AQUA + "=====================================================");
-				Bukkit.broadcastMessage(ChatColor.GREEN + "Player " + Teams.getPlayerColor(player) + player.getName() + ChatColor.GREEN + " captured " +
-						Teams.carriers.get(player).printTeamName() + ChatColor.GREEN + "'s flag and scored a point! Returning flag to base.");
-				Bukkit.broadcastMessage(ChatColor.AQUA + "=====================================================");
-				Safezones.addTeam(Teams.carriers.get(player));
-				player.getInventory().remove(Material.BANNER);
-				Teams.carriers.remove(player);
+			
+			if (Teams.getPlayerTeam(player) != null) {
+				double distance = player.getLocation().distance(Teams.teams.get(Teams.getPlayerTeam(player)).getBannerSpawn());
+				if (distance < 5) {
+					Teams.carriers.get(player).restoreBanner();
+					Bukkit.broadcastMessage(ChatColor.AQUA + "=====================================================");
+					Bukkit.broadcastMessage(ChatColor.GREEN + "Player " + Teams.getPlayerColor(player) + player.getName() + ChatColor.GREEN + " captured " +
+							Teams.carriers.get(player).printTeamName() + ChatColor.GREEN + "'s flag and scored a point! Returning flag to base.");
+					Bukkit.broadcastMessage(ChatColor.AQUA + "=====================================================");
+					Safezones.addTeam(Teams.carriers.get(player));
+					player.getInventory().remove(Material.BANNER);
+					Teams.teams.get(Teams.getPlayerTeam(player)).addPoint();
+					Teams.carriers.remove(player);
+				}
 			}
 		}
 	}
@@ -75,6 +83,8 @@ public class CarrierListeners implements Listener {
 			banner.setBaseColor(flagTeam.getBannerColor());
 			banner.update();
 			flagTeam.addStolenBanner(block);
+			
+			Bukkit.broadcastMessage(ChatColor.GREEN + "Team " + flagTeam.printTeamName() + ChatColor.GREEN + "'s flag was dropped! Will return to base after 30 seconds if not picked up.");
 			
 			Teams.carriers.remove(event.getEntity());	//Remove user from list of carriers
 			
@@ -125,4 +135,12 @@ public class CarrierListeners implements Listener {
 			event.setCancelled(true);
 		}
 	}
+	
+	@EventHandler
+	public void onClick(InventoryClickEvent event) {
+		if (Teams.carriers.containsKey(event.getWhoClicked())) {
+			event.setCancelled(true);
+		}
+	}
+	
 }

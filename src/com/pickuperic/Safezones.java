@@ -40,7 +40,7 @@ public class Safezones {
 				}
 				Bukkit.broadcastMessage(ChatColor.GREEN + "Team " + team.printTeamName() + ChatColor.GREEN + "'s base is no longer under protection by the grace-period!");
 			}
-		}, 200L);
+		}, 12000L);
 	}
 
 }

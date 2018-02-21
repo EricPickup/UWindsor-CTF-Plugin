@@ -26,43 +26,37 @@ public class Team {
 	public static Scoreboard sb = Bukkit.getScoreboardManager().getMainScoreboard();
 	private org.bukkit.scoreboard.Team scoreboardTeam;
 	private boolean flagStolen;
-	private int score;
+	private Score score;
 	
+	//Constructor
 	public Team (String teamName, String teamColor) {
 		
 		this.teamName = teamName;
 		this.teamColor = teamColor.toUpperCase();
-		bannerBlock = null;
-		teamColor = teamColor.toUpperCase();
-		if (teamColor.equals("GOLD"))
-			this.bannerColor = DyeColor.ORANGE;
-		else if (teamColor.equals("DARK_PURPLE"))
-			this.bannerColor = DyeColor.PURPLE;
-		else if (teamColor.equals("AQUA"))
-			this.bannerColor = DyeColor.CYAN;
-		else if (teamColor.equals("LIGHT_PURPLE"))
-			this.bannerColor = DyeColor.PINK;
-		else
-			this.bannerColor = DyeColor.valueOf(teamColor);
+		this.bannerBlock = null;
+		this.teamColor = teamColor.toUpperCase();
 		this.scoreboardTeam = sb.registerNewTeam(teamName.toUpperCase());
 		this.scoreboardTeam.setPrefix(getColor().toString());
-		flagStolen = false;
-		System.out.println(ChatColor.GREEN + "Added team " + teamName);
-		World w = Bukkit.getServer().getWorlds().get(0);
-		this.bannerSpawnLocation = new Location(w,0,0,0);
-		this.score = 0;
-
+		this.flagStolen = false;
+		this.bannerSpawnLocation = new Location(Bukkit.getServer().getWorlds().get(0),0,0,0);
+		this.score = Main.board.getObjective("Team Scores").getScore(printTeamName() + ":");
+		this.score.setScore(0);
+		setBannerColor();
+	}
+	
+	public int getScore() {
+		return this.score.getScore();
+	}
+	
+	public void setScore(int score) {
+		this.score.setScore(score);
+	}
+	
+	public void addPoint() {
+		this.score.setScore(this.score.getScore() + 1);
 	}
 	
 	public void addPlayer(Player player) {
-		
-		//Removing player from all other teams
-		for (String team : Teams.teams.keySet()) {
-			if (Teams.teams.get(team).containsPlayer(player) && !team.equals(this.teamName.toUpperCase())) {
-				System.out.println(team + " != " + this.teamName.toUpperCase());
-				Teams.teams.get(team).removePlayer(player);
-			}
-		}
 		
 		members.add(player.getName());
 		player.sendMessage(ChatColor.GREEN + "You've been added to team " + printTeamName() + ChatColor.GREEN + ".");
@@ -166,6 +160,19 @@ public class Team {
 		}
 	}
 	
+	public void setBannerColor() {
+		if (this.teamColor.equals("GOLD"))
+			this.bannerColor = DyeColor.ORANGE;
+		else if (this.teamColor.equals("DARK_PURPLE"))
+			this.bannerColor = DyeColor.PURPLE;
+		else if (this.teamColor.equals("AQUA"))
+			this.bannerColor = DyeColor.CYAN;
+		else if (this.teamColor.equals("LIGHT_PURPLE"))
+			this.bannerColor = DyeColor.PINK;
+		else
+			this.bannerColor = DyeColor.valueOf(teamColor);
+	}
+	
 	public DyeColor getBannerColor() {
 		return this.bannerColor;
 	}
@@ -225,6 +232,9 @@ public class Team {
 			this.bannerBlock.setType(Material.AIR);
 			this.bannerBlock = null;
 		}
+		this.scoreboardTeam.unregister();
+		Main.board.resetScores(printTeamName() + ":");
+		System.out.println("Reset scores?");
 	}
 	
 }

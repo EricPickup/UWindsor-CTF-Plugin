@@ -23,11 +23,21 @@ public class FlagBreakListener implements Listener {
 			
 			for (String team : Teams.teams.keySet()) {		//For each team
 				
+				Player player = event.getPlayer();
+				
+				if (Teams.getPlayerTeam(player) != null) {
+					Team attackerTeam = Teams.teams.get(Teams.getPlayerTeam(player));
+					if (Safezones.list.contains(attackerTeam)) {
+						event.setCancelled(true);
+						player.sendMessage(ChatColor.RED + "You cannot capture an enemy flag while your team is in the grace-period!");
+						return;
+					}
+				}
+				
 				Team victimTeam = Teams.teams.get(team);
 				
 				if (eventBlock.equals(victimTeam.getBannerBlock())) {			//IF FLAG BROKEN IS THE TEAM'S MAIN FLAG (FROM THEIR BASE)
 					
-					Player player = event.getPlayer();
 					
 					if (victimTeam.containsPlayer(player)) {		//If breaker is breaking their own flag
 					
@@ -78,7 +88,6 @@ public class FlagBreakListener implements Listener {
 					}
 				} else if (eventBlock.equals(victimTeam.getStolenBanner())) {		//IF FLAG BROKEN IS THE TEAM'S TEMPORARY FLAG (already stolen, carrier was killed so flag is dropped on their body for 30s)
 					
-					Player player = event.getPlayer();
 					
 					if (victimTeam.containsPlayer(player)) {
 						

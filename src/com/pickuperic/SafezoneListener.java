@@ -1,7 +1,5 @@
 package com.pickuperic;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Hashtable;
 
 import org.bukkit.entity.Player;
@@ -33,6 +31,7 @@ public class SafezoneListener implements Listener {
 							player.teleport(Teams.teams.get(Teams.getPlayerTeam(player)).getBannerSpawn());
 						}
 						player.sendMessage(ChatColor.GREEN + "Teleported you back to base, detected that you were stuck.");
+						violationsPerPlayer.remove(player);
 					} else {
 						violationsPerPlayer.put(player, violationsPerPlayer.get(player) + 1);	//Increase violations by 1
 					}

@@ -19,7 +19,7 @@ public class CommandAddTeam {
 					sender.sendMessage(ChatColor.GREEN + "Successfully added team " + ChatColor.valueOf(teamColor) + ChatColor.BOLD + teamName + 
 					ChatColor.RESET + ChatColor.GREEN + " to list of teams.");
 				} else {
-					sender.sendMessage(ChatColor.RED + "Error: Team name already in use.");
+					sender.sendMessage(ChatColor.RED + "Error: Team name or color already in use.");
 				}
 				
 			} catch (IllegalArgumentException e) {

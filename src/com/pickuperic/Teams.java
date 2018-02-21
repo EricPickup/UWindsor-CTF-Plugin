@@ -20,8 +20,6 @@ public class Teams {
 		if (containsTeam(teamName)) {
 			return false;
 		} else if(!availableColors.contains(teamColor)) {
-			System.out.println("INVALID COLOR, does not contain " + teamColor);
-			System.out.println(availableColors);
 			return false;
 		} else {
 			teams.put(teamName.toUpperCase(), new Team(teamName, teamColor));
@@ -46,5 +44,13 @@ public class Teams {
 	
 	public static ChatColor getPlayerColor(Player player) {
 		return Teams.teams.get(getPlayerTeam(player).toUpperCase()).getColor();
+	}
+	
+	public static void purgePayer(Player player) {
+		for (Team team : Teams.teams.values()) {
+			if (team.containsPlayer(player)) {
+				team.removePlayer(player);
+			}
+		}
 	}
 }

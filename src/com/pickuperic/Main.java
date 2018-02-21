@@ -1,5 +1,6 @@
 package com.pickuperic;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import org.bukkit.Bukkit;
@@ -8,11 +9,15 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
 public class Main extends JavaPlugin {
 	
 	public static Scoreboard board;
+	public static HashMap<Score, Integer> scores;
 	// Fired when first enabled
     @Override
     public void onEnable() {
@@ -42,6 +47,17 @@ public class Main extends JavaPlugin {
 			}
 		}
 		
+		for (Objective objective : board.getObjectives()) {
+			objective.unregister();
+		}
+		
+		Objective objective = board.registerNewObjective("Team Scores", "dummy");
+		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+		objective.setDisplayName("Team Scores");
+		for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+			player.setScoreboard(board);
+		}	
+		
 		loadConfiguration();
 		
     	ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
@@ -53,6 +69,7 @@ public class Main extends JavaPlugin {
     	getServer().getPluginManager().registerEvents(new PlayerDamageListener(), this);
     	getServer().getPluginManager().registerEvents(new CarrierListeners(), this);
     	getServer().getPluginManager().registerEvents(new SafezoneListener(), this);
+    	getServer().getPluginManager().registerEvents(new CommandHome(), this);
     	
     	
     	Iterator<Recipe> it = getServer().recipeIterator();
@@ -91,6 +108,7 @@ public class Main extends JavaPlugin {
         	for (String member : currentTeamMembers) {	//Adding members to team
         		Teams.teams.get(team).addPlayerByName(member);
         	}
+        	Teams.teams.get(team).setScore(getConfig().getInt(path + ".score"));
         	if (!getConfig().getString(path + ".bannerLocation").equals("null")) {	//If they have a banner placed
         		String[] coords = getConfig().getString(path + ".bannerLocation").split("\\s+");
         		Teams.teams.get(team).addBannerByCoords(coords);
@@ -115,6 +133,7 @@ public class Main extends JavaPlugin {
     			getConfig().set(configPath + ".bannerLocation", team.getBannerCoordinatesConfig());
     		}
     		getConfig().set(configPath + ".members", Teams.teams.get(tableName).members);
+    		getConfig().set(configPath + ".score", team.getScore());
     		System.out.println("Saved info for team " + tableName);
     	}
     	saveConfig();

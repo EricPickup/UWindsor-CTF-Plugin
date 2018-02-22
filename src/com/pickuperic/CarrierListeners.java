@@ -42,7 +42,7 @@ public class CarrierListeners implements Listener {
 			abovePlayer.getWorld().playEffect(abovePlayer, Effect.COLOURED_DUST, 10);
 			
 			if (Teams.getPlayerTeam(player) != null) {
-				double distance = player.getLocation().distance(Teams.teams.get(Teams.getPlayerTeam(player)).getBannerSpawn());
+				double distance = player.getLocation().distance(Teams.getPlayerTeam(player).getBannerSpawn());
 				if (distance < 5) {
 					Teams.carriers.get(player).restoreBanner();
 					Bukkit.broadcastMessage(ChatColor.AQUA + "=====================================================");
@@ -51,7 +51,7 @@ public class CarrierListeners implements Listener {
 					Bukkit.broadcastMessage(ChatColor.AQUA + "=====================================================");
 					Safezones.addTeam(Teams.carriers.get(player));
 					player.getInventory().remove(Material.BANNER);
-					Teams.teams.get(Teams.getPlayerTeam(player)).addPoint();
+					Teams.getPlayerTeam(player).addPoint();
 					Teams.carriers.remove(player);
 				}
 			}

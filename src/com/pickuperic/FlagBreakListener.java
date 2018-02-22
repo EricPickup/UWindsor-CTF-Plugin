@@ -21,12 +21,12 @@ public class FlagBreakListener implements Listener {
 		
 		if (eventBlock.getType() == Material.STANDING_BANNER) {	//If banner is destroyed
 			
-			for (String team : Teams.teams.keySet()) {		//For each team
+			for (String team : Teams.getTeamNames()) {		//For each team
 				
 				Player player = event.getPlayer();
 				
 				if (Teams.getPlayerTeam(player) != null) {
-					Team attackerTeam = Teams.teams.get(Teams.getPlayerTeam(player));
+					Team attackerTeam = Teams.getPlayerTeam(player);
 					if (Safezones.list.contains(attackerTeam)) {
 						event.setCancelled(true);
 						player.sendMessage(ChatColor.RED + "You cannot capture an enemy flag while your team is in the grace-period!");
@@ -34,7 +34,7 @@ public class FlagBreakListener implements Listener {
 					}
 				}
 				
-				Team victimTeam = Teams.teams.get(team);
+				Team victimTeam = Teams.getTeam(team);
 				
 				if (eventBlock.equals(victimTeam.getBannerBlock())) {			//IF FLAG BROKEN IS THE TEAM'S MAIN FLAG (FROM THEIR BASE)
 					

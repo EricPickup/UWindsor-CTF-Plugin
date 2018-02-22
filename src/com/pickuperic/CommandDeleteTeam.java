@@ -24,26 +24,24 @@ public class CommandDeleteTeam {
 			
 		} else if (args.length == 1) {	//If player did not enter a team name but DOES belong to a team (delete that team)	
 			
-			String teamChatName = Teams.teams.get(Teams.getPlayerTeam(player)).printTeamName();
-			String deleteTeam = Teams.getPlayerTeam(player);
-			Teams.availableColors.add(Teams.teams.get(deleteTeam).getColorString());
-			System.out.println("Added " +Teams.teams.get(deleteTeam).getColorString() );
-			Teams.teams.get(deleteTeam).purge();
-			Teams.teams.remove(deleteTeam);
-			player.sendMessage(ChatColor.GREEN + "Removed team " + teamChatName);
+			Team deleteTeam = Teams.getPlayerTeam(player);
+			Teams.availableColors.add(deleteTeam.getColorString());
+			System.out.println("Added " + deleteTeam.getColorString());
+			deleteTeam.purge();
+			Teams.removeTeam(deleteTeam);
+			player.sendMessage(ChatColor.GREEN + "Removed team " + deleteTeam.printTeamName());
 			
-		} else if (!Teams.teams.containsKey(args[1].toUpperCase())) {	//If player DID enter a team but it does not exist
+		} else if (!Teams.containsTeam(args[1])) {	//If player DID enter a team but it does not exist
 			
-			sender.sendMessage(ChatColor.RED + "Invalid team name. Please choose from: " + String.join(", ", Teams.teams.keySet()));
+			sender.sendMessage(ChatColor.RED + "Invalid team name. Please choose from: " + String.join(", ", Teams.getTeamNames()));
 			
 		} else {	//If player enters a team that does exist
 			
-			String deleteTeam = args[1].toUpperCase();
-			String teamChatName = Teams.teams.get(deleteTeam).printTeamName();
-			Teams.availableColors.add(Teams.teams.get(deleteTeam).getColorString());
-			Teams.teams.get(deleteTeam).purge();
-			Teams.teams.remove(deleteTeam);
-			player.sendMessage(ChatColor.GREEN + "Removed team " + teamChatName);
+			Team deleteTeam = Teams.getTeam(args[1]);
+			Teams.availableColors.add(deleteTeam.getColorString());
+			deleteTeam.purge();
+			player.sendMessage(ChatColor.GREEN + "Removed team " + deleteTeam.printTeamName());
+			Teams.removeTeam(deleteTeam);
 		}
 		
 		

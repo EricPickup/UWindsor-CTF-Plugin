@@ -13,14 +13,14 @@ public class CommandGetFlag {
 		if (sender instanceof Player) {
 			if (args.length <= 1) {
 				sender.sendMessage(ChatColor.RED + "Invalid arguments: /teams getflag <team>");
-			} else if (!Teams.teams.get(args[1].toUpperCase()).hasBanner()) {
+			} else if (!Teams.getTeam(args[1].toUpperCase()).hasBanner()) {
 				sender.sendMessage(ChatColor.RED + "Team does not have a banner placed.");
 			} else {
 				String team = args[1].toUpperCase();
 				args[1] = team;
 				Player player = (Player) sender;
-				player.sendMessage(Teams.teams.get(team).printTeamName() + ChatColor.GREEN + 
-						" team's flag is located at: " + Teams.teams.get(team).getBannerCoordinates());
+				player.sendMessage(Teams.getTeam(team).printTeamName() + ChatColor.GREEN + 
+						" team's flag is located at: " + Teams.getTeam(team).getBannerCoordinates());
 			}
 		}
 		return true;

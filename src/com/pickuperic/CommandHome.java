@@ -40,7 +40,7 @@ public class CommandHome implements Listener {
 						player.sendMessage(ChatColor.BLUE + "Teleporting you to base...");
 						waiting.remove(player);
 						if (Teams.getPlayerTeam(player) != null) {
-							player.teleport(Teams.teams.get(Teams.getPlayerTeam(player)).getBannerSpawn());
+							player.teleport(Teams.getPlayerTeam(player).getBannerSpawn());
 						} else {
 							player.sendMessage(ChatColor.RED + "You are not a part of a team therefore you cannot be teleported to base!");
 						}

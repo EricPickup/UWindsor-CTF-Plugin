@@ -106,12 +106,12 @@ public class Main extends JavaPlugin {
         	Teams.addTeam(getConfig().getString(path + ".name"), getConfig().getString(path + ".color"));	//Add the team
         	currentTeamMembers = getConfig().getStringList(path + ".members");
         	for (String member : currentTeamMembers) {	//Adding members to team
-        		Teams.teams.get(team).addPlayerByName(member);
+        		Teams.getTeam(team).addPlayerByName(member);
         	}
-        	Teams.teams.get(team).setScore(getConfig().getInt(path + ".score"));
+        	Teams.getTeam(team).setScore(getConfig().getInt(path + ".score"));
         	if (!getConfig().getString(path + ".bannerLocation").equals("null")) {	//If they have a banner placed
         		String[] coords = getConfig().getString(path + ".bannerLocation").split("\\s+");
-        		Teams.teams.get(team).addBannerByCoords(coords);
+        		Teams.getTeam(team).addBannerByCoords(coords);
         	} else {
         		System.out.println("Banner location null");
         	}
@@ -122,7 +122,7 @@ public class Main extends JavaPlugin {
     
     public void saveConfiguration() {
     	getConfig().set("Teams", "");
-    	for (Team team : Teams.teams.values()) {
+    	for (Team team : Teams.getTeamsValues()) {
     		String tableName = team.getName().toUpperCase();
     		String configPath = "Teams." + tableName;
     		getConfig().set(configPath + ".name", team.getName());
@@ -132,7 +132,7 @@ public class Main extends JavaPlugin {
     		} else {
     			getConfig().set(configPath + ".bannerLocation", team.getBannerCoordinatesConfig());
     		}
-    		getConfig().set(configPath + ".members", Teams.teams.get(tableName).members);
+    		getConfig().set(configPath + ".members", Teams.getTeam(tableName).members);
     		getConfig().set(configPath + ".score", team.getScore());
     		System.out.println("Saved info for team " + tableName);
     	}

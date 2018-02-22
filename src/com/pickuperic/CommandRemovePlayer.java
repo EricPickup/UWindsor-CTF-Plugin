@@ -20,9 +20,9 @@ public class CommandRemovePlayer {
 			if (player == null) {
 				sender.sendMessage(ChatColor.RED + "Invalid user");
 			} else if (!Teams.containsTeam(teamName)) {
-				sender.sendMessage(ChatColor.RED + "Invalid team name. Please choose from: " + String.join(", ", Teams.teams.keySet()));
+				sender.sendMessage(ChatColor.RED + "Invalid team name. Please choose from: " + String.join(", ", Teams.getTeamNames()));
 			} else {
-				Teams.teams.get(teamName).removePlayer(player);
+				Teams.getTeam(teamName).removePlayer(player);
 			}
 		}
 		

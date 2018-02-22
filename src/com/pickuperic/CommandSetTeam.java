@@ -23,11 +23,11 @@ public class CommandSetTeam {
 			if (player == null) {
 				sender.sendMessage(ChatColor.RED + "Invalid user.");
 			} else if (!Teams.containsTeam(team)) {
-				sender.sendMessage(ChatColor.RED + "Invalid team name. Please choose from: " + String.join(", ", Teams.teams.keySet()));
+				sender.sendMessage(ChatColor.RED + "Invalid team name. Please choose from: " + String.join(", ", Teams.getTeamNames()));
 			} else {
 				Teams.purgePayer(player);//Remove player from all other teams
-				Teams.teams.get(team.toUpperCase()).addPlayer(player);
-				sender.sendMessage(ChatColor.GREEN + "Successfully added " + player.getDisplayName() + ChatColor.GREEN + " to team " + Teams.teams.get(team.toUpperCase()).printTeamName() + ChatColor.GREEN + ".");
+				Teams.getTeam(team.toUpperCase()).addPlayer(player);
+				sender.sendMessage(ChatColor.GREEN + "Successfully added " + player.getDisplayName() + ChatColor.GREEN + " to team " + Teams.getTeam(team.toUpperCase()).printTeamName() + ChatColor.GREEN + ".");
 			}
 		}
 	

@@ -28,18 +28,18 @@ public class CommandSetFlag {
 				sender.sendMessage(ChatColor.RED + "You are not part of a team!");
 				return true;
 			}
-			team = Teams.teams.get(Teams.getPlayerTeam(player));
+			team = Teams.getPlayerTeam(player);
 		} else if (player.isOp()) {	//If command entered is in format: /teams setflag <teamName> - check if player is op
 			
 			String teamName = args[1].toUpperCase();
 			if (!Teams.containsTeam(teamName)) {
-				sender.sendMessage(ChatColor.RED + "Invalid team name! Choose from: " + String.join(", ", Teams.teams.keySet()));
+				sender.sendMessage(ChatColor.RED + "Invalid team name! Choose from: " + String.join(", ", Teams.getTeamNames()));
 				return true;
-			} else if (Teams.teams.get(teamName).getStolenStatus() == true) {
+			} else if (Teams.getTeam(teamName).getStolenStatus() == true) {
 				sender.sendMessage(ChatColor.RED + "You cannot place your flag while it is stolen!");
 				return true;
 			} else {
-				team = Teams.teams.get(teamName);
+				team = Teams.getTeam(teamName);
 			}
 			
 		} else {	//Otherwise, player is not op, reject permissions
@@ -76,7 +76,7 @@ public class CommandSetFlag {
 			System.out.println("Player's team: " +  Teams.getPlayerTeam(player));
 			System.out.print("Current team's name: " + team.getName());
 			
-			if (distance < 150 && (Teams.getPlayerTeam(player) == null || !Teams.getPlayerTeam(player).equalsIgnoreCase(team.getName()))) {
+			if (distance < 150 && (Teams.getPlayerTeam(player) == null || !Teams.getPlayerTeam(player).equals(team))) {
 				return true;
 			}
 		}

@@ -92,4 +92,10 @@ public class CommandHubTeams implements CommandExecutor {
 	public void denyPermissions(CommandSender sender) {
 		sender.sendMessage(ChatColor.RED + "You do not have permission to do that!");
 	}
+	
+	public static boolean isConsole(CommandSender sender) {
+		return (sender instanceof Player);
+	}
+	
+	
 }

@@ -24,7 +24,7 @@ public class CommandGetTeam {
 		} else if (Teams.getPlayerTeam(player) == null) {
 			sender.sendMessage(ChatColor.GREEN + "User " + player.getDisplayName() + ChatColor.GREEN + " is not part of a team.");
 		} else {
-			sender.sendMessage(ChatColor.GREEN + "Player "+ player.getDisplayName() + ChatColor.GREEN + " is part of team " + Teams.teams.get(Teams.getPlayerTeam(player).toUpperCase()).printTeamName() + ChatColor.GREEN + ".");
+			sender.sendMessage(ChatColor.GREEN + "Player "+ player.getDisplayName() + ChatColor.GREEN + " is part of team " + Teams.getPlayerTeam(player).printTeamName() + ChatColor.GREEN + ".");
 		}
 	
 		 return true;

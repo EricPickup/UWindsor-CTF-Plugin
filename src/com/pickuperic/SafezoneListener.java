@@ -28,7 +28,7 @@ public class SafezoneListener implements Listener {
 						if (Teams.getPlayerTeam(player) == null) {		//If they are not part of a team, teleport them to spanw
 							player.teleport(player.getWorld().getSpawnLocation());
 						} else {	//If they do belong to a team, teleport them to their own flag
-							player.teleport(Teams.teams.get(Teams.getPlayerTeam(player)).getBannerSpawn());
+							player.teleport(Teams.getPlayerTeam(player).getBannerSpawn());
 						}
 						player.sendMessage(ChatColor.GREEN + "Teleported you back to base, detected that you were stuck.");
 						violationsPerPlayer.remove(player);

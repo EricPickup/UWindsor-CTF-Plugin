@@ -17,7 +17,7 @@ public class PlayerDamageListener implements Listener {
 			Player attacker = (Player) event.getDamager();
 			Player victim = (Player) event.getEntity();
 			
-			if (Teams.getPlayerTeam(attacker).equalsIgnoreCase(Teams.getPlayerTeam(victim))) {
+			if (Teams.getPlayerTeam(attacker).equals(Teams.getPlayerTeam(victim))) {
 				attacker.sendMessage(ChatColor.RED + "You cannot attack your own team members!");
 				event.setCancelled(true);
 			}

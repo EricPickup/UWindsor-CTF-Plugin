@@ -1,7 +1,10 @@
 package com.pickuperic;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Set;
+
 import org.bukkit.entity.Player;
 
 import net.md_5.bungee.api.ChatColor;
@@ -10,7 +13,7 @@ import net.md_5.bungee.api.ChatColor;
 
 public class Teams {
 	
-	public static HashMap<String, Team> teams = new HashMap<String, Team>();	//Key: TeamName, Value: TeamObject
+	private static HashMap<String, Team> teams = new HashMap<String, Team>();	//Key: TeamName, Value: TeamObject
 	public static HashMap<Player, Team> carriers = new HashMap<Player, Team>();
 	static ArrayList<String> availableColors = new ArrayList<String>();
 	
@@ -28,14 +31,40 @@ public class Teams {
 		}
 	}
 	
+	public static boolean removeTeam(Team deleteTeam) {
+		if (teams.containsValue(deleteTeam)) {
+			teams.remove(deleteTeam.getName().toUpperCase());
+			return true;
+		}
+		return false;
+	}
+	
+	public static Team getTeam(String teamName) {
+		teamName = teamName.toUpperCase();
+		if (teams.containsKey(teamName)) {
+			return teams.get(teamName);
+		}
+		return null;
+	}
+	
+	public static Set<String> getTeamNames() {
+		return teams.keySet();
+	}
+	
+	public static Collection<Team> getTeamsValues() {
+		return teams.values();
+	}
+	
+	
+	
 	public static boolean containsTeam(String teamName) {
 		return teams.containsKey(teamName.toUpperCase());
 	}
 	
-	public static String getPlayerTeam(Player player) {
+	public static Team getPlayerTeam(Player player) {
 		for (Team team : teams.values()) {
 			if (team.containsPlayer(player)) {
-				return team.getName().toUpperCase();
+				return team;
 			}
 		}
 		return null;
@@ -43,7 +72,7 @@ public class Teams {
 	
 	
 	public static ChatColor getPlayerColor(Player player) {
-		return Teams.teams.get(getPlayerTeam(player).toUpperCase()).getColor();
+		return getPlayerTeam(player).getColor();
 	}
 	
 	public static void purgePayer(Player player) {

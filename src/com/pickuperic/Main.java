@@ -21,48 +21,11 @@ public class Main extends JavaPlugin {
 	// Fired when first enabled
     @Override
     public void onEnable() {
-
-    	this.getCommand("teams").setExecutor(new CommandHubTeams());
-    	board = Bukkit.getScoreboardManager().getMainScoreboard();
-    	Teams.availableColors.add("RED");
-		Teams.availableColors.add("AQUA");
-		Teams.availableColors.add("GOLD");
-		Teams.availableColors.add("GRAY");
-		Teams.availableColors.add("GREEN");
-		Teams.availableColors.add("YELLOW");
-		Teams.availableColors.add("BLUE");
-		Teams.availableColors.add("LIGHT_PURPLE");
-		Teams.availableColors.add("DARK_PURPLE");
-		Teams.availableColors.add("WHITE");
-		System.out.println(Teams.availableColors);
-		
-		for (org.bukkit.scoreboard.Team team : board.getTeams()) {
-			team.unregister();
-		}
-		
-		for (String entry : board.getEntries()) {
-			Player player = Bukkit.getServer().getPlayerExact(entry);
-			if (player != null) {
-				player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-			}
-		}
-		
-		for (Objective objective : board.getObjectives()) {
-			objective.unregister();
-		}
-		
-		Objective objective = board.registerNewObjective("Team Scores", "dummy");
-		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-		objective.setDisplayName("Team Scores");
-		for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-			player.setScoreboard(board);
-		}	
-		
-		loadConfiguration();
-		
+    	
     	ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-    	console.sendMessage("[BaseCTF] Loaded config");
-		
+    	
+    	//COMMAND AND LISTENERS
+    	this.getCommand("teams").setExecutor(new CommandHubTeams());
     	getServer().getPluginManager().registerEvents(new FlagBreakListener(), this);
     	getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
     	getServer().getPluginManager().registerEvents(new FlagIndirectBreakListener(), this);
@@ -71,17 +34,27 @@ public class Main extends JavaPlugin {
     	getServer().getPluginManager().registerEvents(new SafezoneListener(), this);
     	getServer().getPluginManager().registerEvents(new CommandHome(), this);
     	
+    	Main.board = Bukkit.getScoreboardManager().getMainScoreboard();
     	
-    	Iterator<Recipe> it = getServer().recipeIterator();
-        Recipe recipe;
-        while(it.hasNext())
-        {
-            recipe = it.next();
-            if (recipe != null && recipe.getResult().getType() == Material.BANNER)
-            {
-                it.remove();
-            }
-        }
+    	loadColors();
+		
+		wipeScoreboard();	//Scoreboards save through bukkit, need to wipe and re-add them on reload/start so they're in sync with plugin
+		
+		//Constructing side scoreboard
+		Objective objective = board.registerNewObjective("Team Scores", "Team Scores");
+		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+		objective.setDisplayName("Team Scores");
+		
+		//Assign scoreboard to every player in server
+		for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+			player.setScoreboard(board);
+		}	
+		
+		console.sendMessage("[BaseCTF] Loading config..");
+		loadConfiguration();
+    	console.sendMessage("[BaseCTF] Successfully loaded config");
+    	
+    	disableBannerCrafting();
     	
     }
     // Fired when disabled
@@ -101,20 +74,22 @@ public class Main extends JavaPlugin {
         
         List<String> currentTeamMembers;
         
-        for (String team : getConfig().getConfigurationSection("Teams").getKeys(false)) {
-        	String path = "Teams." + team;
-        	Teams.addTeam(getConfig().getString(path + ".name"), getConfig().getString(path + ".color"));	//Add the team
-        	currentTeamMembers = getConfig().getStringList(path + ".members");
-        	for (String member : currentTeamMembers) {	//Adding members to team
-        		Teams.getTeam(team).addPlayerByName(member);
-        	}
-        	Teams.getTeam(team).setScore(getConfig().getInt(path + ".score"));
-        	if (!getConfig().getString(path + ".bannerLocation").equals("null")) {	//If they have a banner placed
-        		String[] coords = getConfig().getString(path + ".bannerLocation").split("\\s+");
-        		Teams.getTeam(team).addBannerByCoords(coords);
-        	} else {
-        		System.out.println("Banner location null");
-        	}
+        if (getConfig().getConfigurationSection("Teams") != null) {
+        	for (String team : getConfig().getConfigurationSection("Teams").getKeys(false)) {
+            	String path = "Teams." + team;
+            	Teams.addTeam(getConfig().getString(path + ".name"), getConfig().getString(path + ".color"));	//Add the team
+            	currentTeamMembers = getConfig().getStringList(path + ".members");
+            	for (String member : currentTeamMembers) {	//Adding members to team
+            		Teams.getTeam(team).addPlayerByName(member);
+            	}
+            	Teams.getTeam(team).setScore(getConfig().getInt(path + ".score"));
+            	if (!getConfig().getString(path + ".bannerLocation").equals("null")) {	//If they have a banner placed
+            		String[] coords = getConfig().getString(path + ".bannerLocation").split("\\s+");
+            		Teams.getTeam(team).addBannerByCoords(coords);
+            	}
+            }
+        } else {
+        	Bukkit.getServer().getConsoleSender().sendMessage("[BaseCTF] No teams in configuration");
         }
        
     	saveConfig();
@@ -137,6 +112,52 @@ public class Main extends JavaPlugin {
     		System.out.println("Saved info for team " + tableName);
     	}
     	saveConfig();
+    }
+    
+    public void wipeScoreboard() {
+    	
+    	//Remove teams from scoreboard
+    	for (org.bukkit.scoreboard.Team team : board.getTeams()) {
+			team.unregister();
+		}
+		
+		for (String entry : board.getEntries()) {
+			Player player = Bukkit.getServer().getPlayerExact(entry);
+			if (player != null) {
+				player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+			}
+		}
+		
+		//Remove all objectives (objectives are simply each team and their score)
+		for (Objective objective : board.getObjectives()) {
+			objective.unregister();
+		}
+    }
+    
+    public void disableBannerCrafting() {
+    	Iterator<Recipe> it = getServer().recipeIterator();
+        Recipe recipe;
+        while(it.hasNext())
+        {
+            recipe = it.next();
+            if (recipe != null && recipe.getResult().getType() == Material.BANNER)
+            {
+                it.remove();
+            }
+        }
+    }
+    
+    public void loadColors() {
+    	Teams.availableColors.add("RED");
+		Teams.availableColors.add("AQUA");
+		Teams.availableColors.add("GOLD");
+		Teams.availableColors.add("GRAY");
+		Teams.availableColors.add("GREEN");
+		Teams.availableColors.add("YELLOW");
+		Teams.availableColors.add("BLUE");
+		Teams.availableColors.add("LIGHT_PURPLE");
+		Teams.availableColors.add("DARK_PURPLE");
+		Teams.availableColors.add("WHITE");
     }
     
 }

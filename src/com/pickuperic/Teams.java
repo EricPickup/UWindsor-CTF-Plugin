@@ -33,6 +33,7 @@ public class Teams {
 	
 	public static boolean removeTeam(Team deleteTeam) {
 		if (teams.containsValue(deleteTeam)) {
+			deleteTeam.purge();
 			teams.remove(deleteTeam.getName().toUpperCase());
 			return true;
 		}

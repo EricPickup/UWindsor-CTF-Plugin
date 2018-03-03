@@ -221,6 +221,7 @@ public class Team {
 		Player player;
 		for (String playerName : members) {
 			player = Bukkit.getServer().getPlayerExact(playerName);
+			//If player is in-game, strip them of their chat/nametag color
 			if (player != null) {
 				player.sendMessage(ChatColor.GREEN + "You've been removed from team " + printTeamName() + ChatColor.GREEN + ".");
 				scoreboardTeam.removeEntry(player.getName());
@@ -234,7 +235,7 @@ public class Team {
 		}
 		this.scoreboardTeam.unregister();
 		Main.board.resetScores(printTeamName() + ":");
-		System.out.println("Reset scores?");
+		Teams.availableColors.add(getColorString());
 	}
 	
 }

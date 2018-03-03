@@ -61,10 +61,10 @@ public class CarrierListeners implements Listener {
 	@EventHandler
 	public void onDeath(PlayerDeathEvent event) {
 		if (Teams.carriers.containsKey(event.getEntity())) {	//If the dead player was carrying a flag
-			
-					//Remove flag from their drops
-			 List<ItemStack> drops = event.getDrops();
-			 ListIterator<ItemStack> litr = drops.listIterator();
+		
+			//Remove flag from their drops
+			List<ItemStack> drops = event.getDrops();
+			ListIterator<ItemStack> litr = drops.listIterator();
 			while( litr.hasNext() ) {
 				ItemStack stack = litr.next();  
 				if(stack.getType().equals( Material.BANNER))

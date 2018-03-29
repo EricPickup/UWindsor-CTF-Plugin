@@ -48,6 +48,13 @@ public class CommandSetFlag {
 			return true;
 		}
 		
+		for (Player teamMember : team.getPlayers()) {
+			if (Teams.carriers.containsKey(teamMember)) {
+				player.sendMessage(ChatColor.RED + "You cannot change your flag location while one of your team members is carrying an enemy flag!");
+				return true;
+			}
+		}
+		
 		if (team.hasBanner()) {
 			if (!enemiesNearBanner(team) || sender.isOp()) {	//Check if there are enemies near flag, overwrite if user is op
 				player.sendMessage(ChatColor.GREEN + "Removed previously saved flag at location " + team.getBannerCoordinates());

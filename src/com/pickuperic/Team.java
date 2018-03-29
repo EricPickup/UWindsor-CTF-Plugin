@@ -1,6 +1,7 @@
 package com.pickuperic;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
@@ -179,6 +180,17 @@ public class Team {
 	
 	public boolean containsPlayer(Player player) {
 		return members.contains(player.getName());
+	}
+	
+	public List<Player> getPlayers() {
+		List<Player> players = new ArrayList<Player>();
+		Player player;
+		for (String member : this.members) {
+			player = Bukkit.getServer().getPlayerExact(member);
+			if (player != null)
+				players.add(player);
+		}
+		return players;
 	}
 	
 	public ChatColor getColor() {

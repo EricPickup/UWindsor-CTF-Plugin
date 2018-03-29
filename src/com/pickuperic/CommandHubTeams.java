@@ -14,7 +14,7 @@ public class CommandHubTeams implements CommandExecutor {
 		
 		if (args.length == 0) {
 			//HELP PAGE
-			sender.sendMessage(helpMessage());
+			sender.sendMessage(helpMessage(sender));
 		} else {
 			if (args[0].equalsIgnoreCase("create")) {	//	/teams create <teamName> <teamColor>
 				if (sender.isOp()) {
@@ -55,7 +55,7 @@ public class CommandHubTeams implements CommandExecutor {
 				//sets flag location for team
 				CommandSetFlag.onCommand(sender, command, label, args);
 			} else if (args[0].equalsIgnoreCase("help")) {
-				sender.sendMessage(helpMessage());
+				sender.sendMessage(helpMessage(sender));
 			} else if (args[0].equalsIgnoreCase("delete")) {
 				if (sender.isOp()) {
 					CommandDeleteTeam.onCommand(sender, command, label, args);
@@ -64,6 +64,12 @@ public class CommandHubTeams implements CommandExecutor {
 				}
 			} else if (args[0].equalsIgnoreCase("home")) {
 				CommandHome.onCommand(sender, command, label, args);
+			} else if (args[0].equalsIgnoreCase("setscore")) {	//	/teams getflag <team>
+				if (sender.isOp()) {
+					CommandSetScore.onCommand(sender, command, label, args);
+				} else {
+					denyPermissions(sender);
+				}
 			}
 		}
 		
@@ -72,19 +78,33 @@ public class CommandHubTeams implements CommandExecutor {
 	}
 	
 	
-	public String helpMessage() {
+	public String helpMessage(CommandSender sender) {
 		
 		String message = ChatColor.GREEN + "=============WindsorCTF===============";
+		
 		message += "\nCommands:";
-		message += "\n" + ChatColor.AQUA + "/teams help" + ChatColor.GREEN + " - list help menu for plugin";
-		message += "\n" + ChatColor.AQUA + "/teams create <teamName> <teamColor>" + ChatColor.GREEN + " - create new a team with the specified name/color";
-		message += "\n" + ChatColor.AQUA + "/teams delete <teamName>" + ChatColor.GREEN + " - delete a team completely (removes members as well)";
-		message += "\n" + ChatColor.AQUA + "/teams list" + ChatColor.GREEN + " - lists all of the current teams";
-		message += "\n" + ChatColor.AQUA + "/teams add/remove <player> <team>" + ChatColor.GREEN + " - add/remove user to/from specified team";
-		message += "\n" + ChatColor.AQUA + "/teams setFlag <teamName>" + ChatColor.GREEN + " - set the location of the specified team's flag";
-		message += "\n" + ChatColor.AQUA + "/teams getFlag <teamName>" + ChatColor.GREEN + " - get the location of the specified team's flag";
-		message += "\n" + ChatColor.AQUA + "/teams get <player>" + ChatColor.GREEN + " - get the specified user's team name";
-		message += "\n" + ChatColor.AQUA + "/teams info <teamName>" + ChatColor.GREEN + " - list info about the specified team";
+		
+		if (sender.isOp()) {
+			message += "\n" + ChatColor.AQUA + "/teams help" + ChatColor.GREEN + " - list help menu for plugin";
+			message += "\n" + ChatColor.AQUA + "/teams home" + ChatColor.GREEN + " - teleport to your flag";
+			message += "\n" + ChatColor.AQUA + "/teams create <teamName> <teamColor>" + ChatColor.GREEN + " - create new a team with the specified name/color";
+			message += "\n" + ChatColor.AQUA + "/teams delete <teamName>" + ChatColor.GREEN + " - delete a team completely (removes members as well)";
+			message += "\n" + ChatColor.AQUA + "/teams list" + ChatColor.GREEN + " - lists all of the current teams";
+			message += "\n" + ChatColor.AQUA + "/teams add/remove <player> <team>" + ChatColor.GREEN + " - add/remove user to/from specified team";
+			message += "\n" + ChatColor.AQUA + "/teams setFlag <teamName>" + ChatColor.GREEN + " - set the location of the specified team's flag";
+			message += "\n" + ChatColor.AQUA + "/teams getFlag <teamName>" + ChatColor.GREEN + " - get the location of the specified team's flag";
+			message += "\n" + ChatColor.AQUA + "/teams setScore <teamName> <score>" + ChatColor.GREEN + " - set specified team's score";
+			message += "\n" + ChatColor.AQUA + "/teams get <player>" + ChatColor.GREEN + " - get the specified user's team name";
+			message += "\n" + ChatColor.AQUA + "/teams info <teamName>" + ChatColor.GREEN + " - list info about the specified team";
+		} else {
+			message += "\n" + ChatColor.AQUA + "/teams help" + ChatColor.GREEN + " - list help menu for plugin";
+			message += "\n" + ChatColor.AQUA + "/teams home" + ChatColor.GREEN + " - teleport to your flag";
+			message += "\n" + ChatColor.AQUA + "/teams list" + ChatColor.GREEN + " - lists all of the current teams";
+			message += "\n" + ChatColor.AQUA + "/teams setFlag" + ChatColor.GREEN + " - set the location of your team's flag";
+			message += "\n" + ChatColor.AQUA + "/teams getFlag" + ChatColor.GREEN + " - get the location of your team's flag";
+			message += "\n" + ChatColor.AQUA + "/teams get" + ChatColor.GREEN + " - get your team's name";
+			message += "\n" + ChatColor.AQUA + "/teams info <teamName>" + ChatColor.GREEN + " - list info about your team";
+		}
 		message += "\n=====================================";
 		return message;
 	}

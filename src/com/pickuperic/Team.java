@@ -48,8 +48,8 @@ public class Team {
 		return this.score.getScore();
 	}
 	
-	public void setScore(int score) {
-		this.score.setScore(score);
+	public void setScore(int newScore) {
+		this.score.setScore(newScore);
 	}
 	
 	public void addPoint() {

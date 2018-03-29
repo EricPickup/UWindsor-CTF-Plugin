@@ -11,11 +11,11 @@ public class CommandDeleteTeam {
 	public static boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
 		
-		//======================== ERROR CHECKING ===============================
+		//========================== ERROR CHECKING ===============================
 		//Command format: /teams delete
 		if (args.length == 1) {
 			
-			//If sender is console and did not enter a team name
+			//If sender is console, console cannot belong to a team and therefore should enter a team name
 			if (!(sender instanceof Player)) {
 				sender.sendMessage(ChatColor.RED + "Console must enter a team name!");
 				return true;

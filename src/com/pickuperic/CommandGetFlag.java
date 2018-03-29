@@ -10,6 +10,22 @@ public class CommandGetFlag {
 
 	public static boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
+		//========================== ERROR CHECKING ===============================
+		//Command format: /teams getFlag
+		if (args.length == 1) {
+			//Check if sender is console, console cannot belong to a team therefore they should enter a team name
+			if (!(sender instanceof Player)) {
+				sender.sendMessage("You must enter a team name from console!");
+				return true;
+			}
+		} else {
+			if (!Teams.containsTeam(args[1])) {
+				sender.sendMessage(ChatColor.RED + "Invalid team name! Choose from: " + String.join(", ", Teams.getTeamNames()));
+				return true;
+			}
+		}
+		//=========================================================================
+		
 		if (sender instanceof Player) {
 			if (args.length <= 1) {
 				sender.sendMessage(ChatColor.RED + "Invalid arguments: /teams getflag <team>");

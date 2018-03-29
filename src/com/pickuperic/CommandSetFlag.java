@@ -29,6 +29,7 @@ public class CommandSetFlag {
 				return true;
 			}
 			team = Teams.getPlayerTeam(player);
+			
 		} else if (player.isOp()) {	//If command entered is in format: /teams setflag <teamName> - check if player is op
 			
 			String teamName = args[1].toUpperCase();
@@ -48,12 +49,13 @@ public class CommandSetFlag {
 		}
 		
 		if (team.hasBanner()) {
-			if (enemiesNearBanner(team)) {
+			if (!enemiesNearBanner(team) || sender.isOp()) {	//Check if there are enemies near flag, overwrite if user is op
+				player.sendMessage(ChatColor.GREEN + "Removed previously saved flag at location " + team.getBannerCoordinates());
+				team.removeBanner();
+			} else {
 				player.sendMessage(ChatColor.RED + "You cannot move the flag when enemies are near it!");
 				return true;
 			}
-			player.sendMessage(ChatColor.GREEN + "Removed previously saved flag at location " + team.getBannerCoordinates());
-			team.removeBanner();
 		}
 		
 		World w = Bukkit.getServer().getWorlds().get(0);

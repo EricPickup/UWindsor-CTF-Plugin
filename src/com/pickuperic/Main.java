@@ -82,7 +82,7 @@ public class Main extends JavaPlugin {
             	for (String member : currentTeamMembers) {	//Adding members to team
             		Teams.getTeam(team).addPlayerByName(member);
             	}
-            	Teams.getTeam(team).setScore(getConfig().getInt(path + ".score"));
+            	Teams.getTeam(team).setScore(getConfig().getInt(path + ".score"));	//Adding team to scoreboard
             	if (!getConfig().getString(path + ".bannerLocation").equals("null")) {	//If they have a banner placed
             		String[] coords = getConfig().getString(path + ".bannerLocation").split("\\s+");
             		Teams.getTeam(team).addBannerByCoords(coords);

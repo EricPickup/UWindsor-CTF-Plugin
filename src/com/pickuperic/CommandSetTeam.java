@@ -19,7 +19,7 @@ public class CommandSetTeam {
 			String playerName = args[1];
 			String team = args[2].toUpperCase();
 			Player player = Bukkit.getServer().getPlayerExact(playerName);
-			
+	
 			if (player == null) {
 				sender.sendMessage(ChatColor.RED + "Invalid user.");
 			} else if (!Teams.containsTeam(team)) {

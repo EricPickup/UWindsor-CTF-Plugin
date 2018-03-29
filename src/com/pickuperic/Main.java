@@ -4,15 +4,19 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
+
+import net.md_5.bungee.api.ChatColor;
 
 public class Main extends JavaPlugin {
 	
@@ -55,6 +59,8 @@ public class Main extends JavaPlugin {
     	console.sendMessage("[BaseCTF] Successfully loaded config");
     	
     	disableBannerCrafting();
+    	
+    	initializeCompasses();
     	
     }
     // Fired when disabled
@@ -158,6 +164,33 @@ public class Main extends JavaPlugin {
 		Teams.availableColors.add("LIGHT_PURPLE");
 		Teams.availableColors.add("DARK_PURPLE");
 		Teams.availableColors.add("WHITE");
+    }
+    
+    public void initializeCompasses() {
+    	BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
+		scheduler.scheduleSyncRepeatingTask(this, new Runnable() {
+			@Override
+			public void run() {
+				for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+					double minDistance = 999999;
+					Location closestFlag = null;
+					for (Team team : Teams.getTeamsValues()) {
+						if (!(Teams.getPlayerTeam(player).equals(team))) {
+							double distanceFromEnemyTeam = player.getLocation().distance(team.getBannerSpawn());
+							if (distanceFromEnemyTeam < minDistance) {
+								minDistance = distanceFromEnemyTeam;
+								closestFlag = team.getBannerSpawn();
+							}
+						}
+					}
+					if (closestFlag != null) {
+						player.setCompassTarget(closestFlag);
+					}
+					player.sendMessage("Changed compass direction");
+				}
+			
+			}
+		}, 0L, 250L);
     }
     
 }

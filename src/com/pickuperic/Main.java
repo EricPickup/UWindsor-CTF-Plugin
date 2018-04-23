@@ -22,6 +22,7 @@ public class Main extends JavaPlugin {
 	
 	public static Scoreboard board;
 	public static HashMap<Score, Integer> scores;
+	public static boolean pvpEnabled = false;
 	// Fired when first enabled
     @Override
     public void onEnable() {
@@ -175,7 +176,7 @@ public class Main extends JavaPlugin {
 					double minDistance = 999999;
 					Location closestFlag = null;
 					for (Team team : Teams.getTeamsValues()) {
-						if (!(Teams.getPlayerTeam(player).equals(team))) {
+						if (Teams.getPlayerTeam(player) != null && !(Teams.getPlayerTeam(player).equals(team))) {
 							double distanceFromEnemyTeam = player.getLocation().distance(team.getBannerSpawn());
 							if (distanceFromEnemyTeam < minDistance) {
 								minDistance = distanceFromEnemyTeam;
@@ -186,7 +187,6 @@ public class Main extends JavaPlugin {
 					if (closestFlag != null) {
 						player.setCompassTarget(closestFlag);
 					}
-					player.sendMessage("Changed compass direction");
 				}
 			
 			}

@@ -23,6 +23,7 @@ public class CommandRemovePlayer {
 				sender.sendMessage(ChatColor.RED + "Invalid team name. Please choose from: " + String.join(", ", Teams.getTeamNames()));
 			} else {
 				Teams.getTeam(teamName).removePlayer(player);
+				sender.sendMessage(ChatColor.GREEN + "Removed player from the team.");
 			}
 		}
 		

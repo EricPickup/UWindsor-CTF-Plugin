@@ -70,6 +70,13 @@ public class CommandHubTeams implements CommandExecutor {
 				} else {
 					denyPermissions(sender);
 				}
+			} else if (args[0].equalsIgnoreCase("pvp")) {
+				if (sender.isOp()) {
+					CommandPvP.onCommand(sender, command, label, args);
+				} else {
+					denyPermissions(sender);
+				}
+				
 			}
 		}
 		
@@ -83,7 +90,7 @@ public class CommandHubTeams implements CommandExecutor {
 		String message = ChatColor.GREEN + "=============WindsorCTF===============";
 		
 		message += "\nCommands:";
-		
+		//ADMIN COMMANDS
 		if (sender.isOp()) {
 			message += "\n" + ChatColor.AQUA + "/teams help" + ChatColor.GREEN + " - list help menu for plugin";
 			message += "\n" + ChatColor.AQUA + "/teams home" + ChatColor.GREEN + " - teleport to your flag";
@@ -96,7 +103,9 @@ public class CommandHubTeams implements CommandExecutor {
 			message += "\n" + ChatColor.AQUA + "/teams setScore <teamName> <score>" + ChatColor.GREEN + " - set specified team's score";
 			message += "\n" + ChatColor.AQUA + "/teams get <player>" + ChatColor.GREEN + " - get the specified user's team name";
 			message += "\n" + ChatColor.AQUA + "/teams info <teamName>" + ChatColor.GREEN + " - list info about the specified team";
+			message += "\n" + ChatColor.AQUA + "/teams pvp true/false" + ChatColor.GREEN + " - enable or disable pvp manually";
 		} else {
+		//REGULAR COMMANDS
 			message += "\n" + ChatColor.AQUA + "/teams help" + ChatColor.GREEN + " - list help menu for plugin";
 			message += "\n" + ChatColor.AQUA + "/teams home" + ChatColor.GREEN + " - teleport to your flag";
 			message += "\n" + ChatColor.AQUA + "/teams list" + ChatColor.GREEN + " - lists all of the current teams";

@@ -12,6 +12,11 @@ public class PlayerDamageListener implements Listener {
 	@EventHandler
 	public void onDamage(EntityDamageByEntityEvent event) {
 		
+		if (Main.pvpEnabled == false) {
+			event.setCancelled(true);
+			event.getDamager().sendMessage(ChatColor.RED + "PvP is currently disabled!");
+		}
+		
 		if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {	//If the attacker and victim are players
 			
 			Player attacker = (Player) event.getDamager();

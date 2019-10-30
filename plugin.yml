@@ -1,7 +1,8 @@
-name: BaseCTF
-main: com.pickuperic.Main
-version: 1.0
+main: ca.uwindsor.css.ctf.Main
+name: WindsorCTF
+version: 2.0
+api-version: 1.14
 commands:
-  teams:
-    description: Teams
-    usage: /teams
+    teams:
+       description: Teams
+       usage: /teams

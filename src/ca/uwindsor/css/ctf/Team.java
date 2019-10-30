@@ -1,4 +1,4 @@
-package com.pickuperic;
+package ca.uwindsor.css.ctf;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -124,7 +124,7 @@ public class Team {
 		removeStolenBanner();
 		World w = Bukkit.getServer().getWorlds().get(0);
 		Block block = w.getBlockAt(this.bannerSpawnLocation);
-		block.setType(Material.STANDING_BANNER);
+		block.setType(getBannerMaterial());
 		Banner banner = (Banner) block.getState();
 		banner.setBaseColor(getBannerColor());
 		banner.update();
@@ -139,7 +139,7 @@ public class Team {
 		} else {
 			World w = Bukkit.getServer().getWorlds().get(0);
 			Block block = w.getBlockAt(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]), Integer.parseInt(coords[2]));
-			block.setType(Material.STANDING_BANNER);
+			block.setType(getBannerMaterial());
 			Banner banner = (Banner) block.getState();
 			banner.setBaseColor(getBannerColor());
 			banner.update();
@@ -176,6 +176,19 @@ public class Team {
 	
 	public DyeColor getBannerColor() {
 		return this.bannerColor;
+	}
+	
+	public Material getBannerMaterial() {
+		if (this.teamColor.equals("GOLD"))
+			return Material.ORANGE_BANNER;
+		else if (this.teamColor.equals("DARK_PURPLE"))
+			return Material.PURPLE_BANNER;
+		else if (this.teamColor.equals("AQUA"))
+			return Material.CYAN_BANNER;
+		else if (this.teamColor.equals("LIGHT_PURPLE"))
+			return Material.PINK_BANNER;
+		else
+			return Material.valueOf(teamColor + "_BANNER");
 	}
 	
 	public boolean containsPlayer(Player player) {

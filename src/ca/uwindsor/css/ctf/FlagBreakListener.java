@@ -1,7 +1,8 @@
-package com.pickuperic;
+package ca.uwindsor.css.ctf;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,7 +20,7 @@ public class FlagBreakListener implements Listener {
 		
 		Block eventBlock = event.getBlock();
 		
-		if (eventBlock.getType() == Material.STANDING_BANNER) {	//If banner is destroyed
+		if (Tag.BANNERS.isTagged(eventBlock.getType())) {	//If banner is destroyed
 			
 			for (String team : Teams.getTeamNames()) {		//For each team
 				
@@ -74,9 +75,8 @@ public class FlagBreakListener implements Listener {
 						
 						victimTeam.setStolenStatus(true);
 						
-						ItemStack i = new ItemStack(Material.BANNER, 1);
+						ItemStack i = new ItemStack(victimTeam.getBannerMaterial(), 1);
 						BannerMeta m = (BannerMeta)i.getItemMeta();
-						m.setBaseColor(victimTeam.getBannerColor());
 						m.setDisplayName(victimTeam.getColor() + team + "'S FLAG");
 						i.setItemMeta(m);
 						
@@ -117,9 +117,8 @@ public class FlagBreakListener implements Listener {
 						
 						victimTeam.removeStolenBanner();
 						
-						ItemStack i = new ItemStack(Material.BANNER, 1);
+						ItemStack i = new ItemStack(victimTeam.getBannerMaterial(), 1);
 						BannerMeta m = (BannerMeta)i.getItemMeta();
-						m.setBaseColor(victimTeam.getBannerColor());
 						m.setDisplayName(victimTeam.getColor() + team + "'S FLAG");
 						i.setItemMeta(m);
 						

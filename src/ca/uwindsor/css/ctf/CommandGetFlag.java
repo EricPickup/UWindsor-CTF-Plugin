@@ -1,4 +1,4 @@
-package com.pickuperic;
+package ca.uwindsor.css.ctf;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

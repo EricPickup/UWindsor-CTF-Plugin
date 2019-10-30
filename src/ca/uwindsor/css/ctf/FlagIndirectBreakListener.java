@@ -1,7 +1,7 @@
-package com.pickuperic;
+package ca.uwindsor.css.ctf;
 
 import java.util.Iterator;
-import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,7 +18,7 @@ public class FlagIndirectBreakListener implements Listener {
 		
 		Block eventBlock = event.getBlock();
 		
-		if (eventBlock.getType() == Material.STANDING_BANNER) {	//If banner is destroyed
+		if (Tag.BANNERS.isTagged(eventBlock.getType())) {	//If banner is destroyed
 			event.setCancelled(true);
 		}
 	}
@@ -28,7 +28,7 @@ public class FlagIndirectBreakListener implements Listener {
 		
 		Block eventBlock = event.getBlock();
 		
-		if (eventBlock.getType() == Material.STANDING_BANNER) {	//If banner is destroyed
+		if (Tag.BANNERS.isTagged(eventBlock.getType())) {	//If banner is destroyed
 			event.setCancelled(true);
 		}
 	}
@@ -37,7 +37,7 @@ public class FlagIndirectBreakListener implements Listener {
 	public void blockBurn(BlockBurnEvent event) {
 		Block eventBlock = event.getBlock();
 		
-		if (eventBlock.getType() == Material.STANDING_BANNER) {	//If banner is destroyed
+		if (Tag.BANNERS.isTagged(eventBlock.getType())) {	//If banner is destroyed
 			event.setCancelled(true);
 		}
 	}
@@ -47,7 +47,7 @@ public class FlagIndirectBreakListener implements Listener {
 		Iterator<Block> it = event.blockList().iterator();
 		while (it.hasNext()) {
 		    Block b= it.next();
-		    if (b.getType() == Material.STANDING_BANNER) {
+		    if (Tag.BANNERS.isTagged(b.getType())) {
 		    	it.remove();
 		    }
 		}
@@ -58,7 +58,7 @@ public class FlagIndirectBreakListener implements Listener {
 		Iterator<Block> it = event.blockList().iterator();
 		while (it.hasNext()) {
 		    Block b= it.next();
-		    if (b.getType() == Material.STANDING_BANNER) {
+		    if (Tag.BANNERS.isTagged(b.getType())) {
 		    	it.remove();
 		    }
 		}

@@ -1,4 +1,4 @@
-package com.pickuperic;
+package ca.uwindsor.css.ctf;
 
 import java.util.HashMap;
 import org.bukkit.Bukkit;

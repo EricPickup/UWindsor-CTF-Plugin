@@ -1,7 +1,6 @@
-package com.pickuperic;
+package ca.uwindsor.css.ctf;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -67,7 +66,7 @@ public class CommandSetFlag {
 		
 		World w = Bukkit.getServer().getWorlds().get(0);
 		Block block = w.getBlockAt(player.getLocation());
-		block.setType(Material.STANDING_BANNER);
+		block.setType(team.getBannerMaterial());
 		Banner banner = (Banner) block.getState();
 		
 		banner.setBaseColor(team.getBannerColor());

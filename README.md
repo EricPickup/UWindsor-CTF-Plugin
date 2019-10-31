@@ -23,7 +23,7 @@ The team with the most points (captured flags) in the end wins.
 
 ## Requirements
 
-Compatible with Minecraft 1.8.8 and Spigot's 1.8.8 versions. Untested with other versions.
+Compatible with Minecraft 1.14.4 and Spigot's 1.14.4 versions. Untested with other versions.
 
 ## Commands
 

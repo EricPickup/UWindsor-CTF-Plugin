@@ -17,7 +17,7 @@ public class CommandAddTeam {
 		try {
 			String teamName = args[1];
 			String teamColor = args[2].toUpperCase();
-			if (TeamManager.addTeam(teamName, teamColor)) {
+			if (TeamManager.addTeam(teamName, teamColor) == true) {
 				sender.sendMessage(ChatColor.GREEN + "Successfully added team " + ChatColor.valueOf(teamColor) + ChatColor.BOLD + teamName + 
 				ChatColor.RESET + ChatColor.GREEN + " to list of teams.");
 			} else {

@@ -12,31 +12,26 @@ public class CommandGetFlag {
 		
 		//========================== ERROR CHECKING ===============================
 		//Command format: /teams getFlag
-		if (args.length == 1) {
+		if (args.length == 1 && !(sender instanceof Player)) {
 			//Check if sender is console, console cannot belong to a team therefore they should enter a team name
-			if (!(sender instanceof Player)) {
-				sender.sendMessage("You must enter a team name from console!");
-				return true;
-			}
-		} else {
-			if (!TeamManager.containsTeam(args[1])) {
-				sender.sendMessage(ChatColor.RED + "Invalid team name! Choose from: " + String.join(", ", TeamManager.getTeamNames()));
-				return true;
-			}
+			sender.sendMessage("You must enter a team name from console!");
+			return true;
+		} else if (!TeamManager.containsTeam(args[1])) {
+			sender.sendMessage(ChatColor.RED + "Invalid team name! Choose from: " + String.join(", ", TeamManager.getTeamNames()));
+			return true;
 		}
 		//=========================================================================
-		
+		String teamName = args[1].toUpperCase();
 		if (sender instanceof Player) {
 			if (args.length <= 1) {
 				sender.sendMessage(ChatColor.RED + "Invalid arguments: /teams getflag <team>");
-			} else if (!TeamManager.getTeam(args[1].toUpperCase()).hasBanner()) {
+			} else if (!TeamManager.getTeam(teamName).hasBanner()) {
 				sender.sendMessage(ChatColor.RED + "Team does not have a banner placed.");
 			} else {
-				String team = args[1].toUpperCase();
-				args[1] = team;
 				Player player = (Player) sender;
-				player.sendMessage(TeamManager.getTeam(team).printTeamName() + ChatColor.GREEN + 
-						" team's flag is located at: " + TeamManager.getTeam(team).getBannerCoordinates());
+				Team team = TeamManager.getTeam(teamName);
+				player.sendMessage(team.printTeamName() + ChatColor.GREEN + 
+						" team's flag is located at: " + team.getBannerCoordinates());
 			}
 		}
 		return true;

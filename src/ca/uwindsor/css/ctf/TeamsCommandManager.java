@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 import net.md_5.bungee.api.ChatColor;
 
-public class CommandHubTeams implements CommandExecutor {
+public class TeamsCommandManager implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {

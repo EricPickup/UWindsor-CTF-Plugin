@@ -6,6 +6,7 @@ import java.util.ListIterator;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.Banner;
@@ -30,27 +31,27 @@ public class CarrierListeners implements Listener {
 
 	@EventHandler
 	public void onMove(PlayerMoveEvent event) {
-		
 		Player player = event.getPlayer();
 		
-		if (TeamManager.flagCarriers.containsKey(player)) {
+		if (playerIsCarryingFlag(player)) {
 			
-			player.getLocation().getWorld().playEffect(player.getLocation(), Effect.SMOKE, 10);
 			Location abovePlayer = new Location(player.getWorld(),player.getLocation().getX(), player.getLocation().getY() + 1, player.getLocation().getZ());
+			player.getLocation().getWorld().playEffect(player.getLocation(), Effect.SMOKE, 10);
 			abovePlayer.getWorld().playEffect(abovePlayer, Effect.SMOKE, 10);
 			
-			if (TeamManager.getPlayerTeam(player) != null) {
-				double distance = player.getLocation().distance(TeamManager.getPlayerTeam(player).getBannerSpawn());
+			Team playerTeam = TeamManager.getPlayerTeam(player);
+			if (playerTeam != null) {
+				double distance = player.getLocation().distance(playerTeam.getBannerSpawn());
 				if (distance < 5) {
 					Team victimTeam = TeamManager.flagCarriers.get(player);
-					TeamManager.flagCarriers.get(player).restoreBanner();
+					victimTeam.restoreBanner();
 					Bukkit.broadcastMessage(ChatColor.AQUA + "=====================================================");
 					Bukkit.broadcastMessage(ChatColor.GREEN + "Player " + TeamManager.getPlayerColor(player) + player.getName() + ChatColor.GREEN + " captured " +
 							victimTeam.printTeamName() + ChatColor.GREEN + "'s flag and scored a point! Returning flag to base.");
 					Bukkit.broadcastMessage(ChatColor.AQUA + "=====================================================");
 					Safezones.addTeam(victimTeam);
 					player.getInventory().remove(victimTeam.getBannerMaterial());
-					TeamManager.getPlayerTeam(player).addPoint();
+					playerTeam.addPoint();
 					TeamManager.flagCarriers.remove(player);
 				}
 			}
@@ -59,28 +60,13 @@ public class CarrierListeners implements Listener {
 	
 	@EventHandler
 	public void onDeath(PlayerDeathEvent event) {
-		if (TeamManager.flagCarriers.containsKey(event.getEntity())) {	//If the dead player was carrying a flag
+		if (playerIsCarryingFlag(event.getEntity())) {	//If the dead player was carrying a flag
 			Team victimTeam = TeamManager.flagCarriers.get(event.getEntity());	//Team of the stolen flag
-			//Remove flag from their drops
-			List<ItemStack> drops = event.getDrops();
-			ListIterator<ItemStack> litr = drops.listIterator();
-			while( litr.hasNext() ) {
-				ItemStack stack = litr.next();  
-				if(stack.getType().equals(victimTeam.getBannerMaterial()))
-				{
-					litr.remove();
-				}
-			 }
-			
-			World w = Bukkit.getServer().getWorlds().get(0);		//Place temp flag
-			Location tempLocation = event.getEntity().getLocation();
-			Block block = w.getBlockAt(tempLocation);
-			block.setType(victimTeam.getBannerMaterial());
-			Banner banner = (Banner) block.getState();
-			
-			banner.setBaseColor(victimTeam.getBannerColor());
-			banner.update();
-			victimTeam.addStolenBanner(block);
+			Material flagMaterial = victimTeam.getBannerMaterial();
+			removeFlagFropDrops(event.getDrops(), flagMaterial);
+
+			Location tempFlagLocation = event.getEntity().getLocation();
+			placeTemporaryBanner(event.getEntity().getLocation(), flagMaterial, victimTeam);
 			
 			Bukkit.broadcastMessage(ChatColor.GREEN + "Team " + victimTeam.printTeamName() + ChatColor.GREEN + "'s flag was dropped! Will return to base after 30 seconds if not picked up.");
 			
@@ -91,7 +77,8 @@ public class CarrierListeners implements Listener {
 			scheduler.scheduleSyncDelayedTask(JavaPlugin.getPlugin(Main.class), new Runnable() {
 				@Override
 				public void run() {
-					if (w.getBlockAt(tempLocation).getType().equals(victimTeam.getBannerMaterial())) {
+					World w = Bukkit.getServer().getWorlds().get(0);
+					if (w.getBlockAt(tempFlagLocation).getType().equals(victimTeam.getBannerMaterial())) {
 						victimTeam.restoreBanner();
 						Bukkit.broadcastMessage(ChatColor.AQUA + "=====================================================");
 						Bukkit.broadcastMessage(ChatColor.GREEN + "Team " + victimTeam.printTeamName() + ChatColor.GREEN + 
@@ -133,12 +120,33 @@ public class CarrierListeners implements Listener {
 			event.setCancelled(true);
 		}
 	}
-	
+
 	@EventHandler
 	public void onClick(InventoryClickEvent event) {
 		if (TeamManager.flagCarriers.containsKey(event.getWhoClicked())) {
 			event.setCancelled(true);
 		}
 	}
-	
+
+	public boolean playerIsCarryingFlag(Player player) {
+		return TeamManager.flagCarriers.containsKey(player);
+	}
+
+	public void removeFlagFropDrops(List<ItemStack> drops, Material flagMaterial) {
+		ListIterator<ItemStack> litr = drops.listIterator();
+		while( litr.hasNext() ) {
+			ItemStack stack = litr.next();
+			if(stack.getType().equals(flagMaterial))
+			{
+				litr.remove();
+			}
+		 }
+	}
+
+	public void placeTemporaryBanner(Location location, Material flagMaterial, Team victimTeam) {
+		World w = Bukkit.getServer().getWorlds().get(0);
+		Block block = w.getBlockAt(location);
+		block.setType(flagMaterial);
+		victimTeam.addStolenBanner(block);
+	}
 }

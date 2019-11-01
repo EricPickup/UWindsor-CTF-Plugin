@@ -42,25 +42,14 @@ public class Main extends JavaPlugin {
     	loadColors();
 		
 		wipeScoreboard();	//Scoreboards save through bukkit, need to wipe and re-add them on reload/start so they're in sync with plugin
-		
-		//Constructing side scoreboard
-		Objective objective = board.registerNewObjective("Team Scores", "Team Scores");
-		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-		objective.setDisplayName("Team Scores");
-		
-		//Assign scoreboard to every player in server
-		for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-			player.setScoreboard(board);
-		}	
+		constructScoreboard();
 		
 		console.sendMessage("[BaseCTF] Loading config..");
 		loadConfiguration();
     	console.sendMessage("[BaseCTF] Successfully loaded config");
     	
     	disableBannerCrafting();
-    	
     	initializeCompasses();
-    	
     }
     // Fired when disabled
     @Override
@@ -139,6 +128,18 @@ public class Main extends JavaPlugin {
 		}
     }
     
+    public void constructScoreboard() {
+		//Constructing side scoreboard
+		Objective objective = board.registerNewObjective("Team Scores", "Team Scores");
+		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+		objective.setDisplayName("Team Scores");
+
+		//Assign scoreboard to every player in server
+		for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+			player.setScoreboard(board);
+		}
+    }
+
     public void disableBannerCrafting() {
     	Iterator<Recipe> it = getServer().recipeIterator();
         Recipe recipe;

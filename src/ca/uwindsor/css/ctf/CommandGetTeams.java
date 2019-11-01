@@ -11,7 +11,7 @@ public class CommandGetTeams {
 		
 		String message = ChatColor.GREEN + "Current teams: ";
 		
-		for (Team team : TeamManager.getTeamsValues()) {
+		for (Team team : TeamManager.getTeams()) {
 			message += team.printTeamName();
 			message += ChatColor.GREEN + ", ";
 		}

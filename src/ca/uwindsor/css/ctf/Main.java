@@ -91,7 +91,7 @@ public class Main extends JavaPlugin {
     
     public void saveConfiguration() {
     	getConfig().set("Teams", "");
-    	for (Team team : TeamManager.getTeamsValues()) {
+    	for (Team team : TeamManager.getTeams()) {
     		String tableName = team.getName().toUpperCase();
     		String configPath = "Teams." + tableName;
     		getConfig().set(configPath + ".name", team.getName());
@@ -174,7 +174,7 @@ public class Main extends JavaPlugin {
 				for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 					double minDistance = 999999;
 					Location closestFlag = null;
-					for (Team team : TeamManager.getTeamsValues()) {
+					for (Team team : TeamManager.getTeams()) {
 						if (TeamManager.getPlayerTeam(player) != null && !(TeamManager.getPlayerTeam(player).equals(team))) {
 							double distanceFromEnemyTeam = player.getLocation().distance(team.getBannerSpawn());
 							if (distanceFromEnemyTeam < minDistance) {

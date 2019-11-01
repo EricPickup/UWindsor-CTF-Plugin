@@ -52,7 +52,7 @@ public class TeamManager {
 		return teams.keySet();
 	}
 	
-	public static Collection<Team> getTeamsValues() {
+	public static Collection<Team> getTeams() {
 		return teams.values();
 	}
 	

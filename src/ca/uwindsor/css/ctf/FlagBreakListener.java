@@ -83,7 +83,7 @@ public class FlagBreakListener implements Listener {
 						//Replacing held item slot with flag
 						player.getInventory().addItem(player.getItemInHand());
 						player.setItemInHand(i);
-						TeamManager.carriers.put(player, victimTeam);
+						TeamManager.flagCarriers.put(player, victimTeam);
 				
 					}
 				} else if (eventBlock.equals(victimTeam.getStolenBanner())) {		//IF FLAG BROKEN IS THE TEAM'S TEMPORARY FLAG (already stolen, carrier was killed so flag is dropped on their body for 30s)
@@ -125,7 +125,7 @@ public class FlagBreakListener implements Listener {
 						//Replacing held item slot with flag
 						player.getInventory().addItem(player.getItemInHand());
 						player.setItemInHand(i);
-						TeamManager.carriers.put(player, victimTeam);
+						TeamManager.flagCarriers.put(player, victimTeam);
 					}
 					
 				}

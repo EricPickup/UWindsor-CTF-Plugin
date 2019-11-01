@@ -48,7 +48,7 @@ public class CommandSetFlag {
 		}
 		
 		for (Player teamMember : team.getPlayers()) {
-			if (TeamManager.carriers.containsKey(teamMember)) {
+			if (TeamManager.flagCarriers.containsKey(teamMember)) {
 				player.sendMessage(ChatColor.RED + "You cannot change your flag location while one of your team members is carrying an enemy flag!");
 				return true;
 			}

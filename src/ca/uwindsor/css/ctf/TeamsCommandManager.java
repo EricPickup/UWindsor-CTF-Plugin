@@ -26,7 +26,7 @@ public class TeamsCommandManager implements CommandExecutor {
 			}
 		} else if (subCommand.equalsIgnoreCase("list")) {	//	/teams list
 			//list teams
-			CommandGetTeams.onCommand(sender, command, label, args);
+			CommandList.onCommand(sender, command, label, args);
 		} else if (subCommand.equalsIgnoreCase("add")) {	//	/teams add <player> <toTeam>
 			//add player to team
 			if (sender.isOp()) {

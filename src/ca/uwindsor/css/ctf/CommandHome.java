@@ -24,7 +24,7 @@ public class CommandHome implements Listener {
 			
 			Player player = (Player) sender;
 			
-			if (TeamManager.carriers.containsKey(player)) {
+			if (TeamManager.flagCarriers.containsKey(player)) {
 				player.sendMessage(ChatColor.RED + "You cannot teleport while carrying the flag!");
 				return true;
 			}

@@ -33,7 +33,7 @@ public class CarrierListeners implements Listener {
 		
 		Player player = event.getPlayer();
 		
-		if (TeamManager.carriers.containsKey(player)) {
+		if (TeamManager.flagCarriers.containsKey(player)) {
 			
 			player.getLocation().getWorld().playEffect(player.getLocation(), Effect.SMOKE, 10);
 			Location abovePlayer = new Location(player.getWorld(),player.getLocation().getX(), player.getLocation().getY() + 1, player.getLocation().getZ());
@@ -42,8 +42,8 @@ public class CarrierListeners implements Listener {
 			if (TeamManager.getPlayerTeam(player) != null) {
 				double distance = player.getLocation().distance(TeamManager.getPlayerTeam(player).getBannerSpawn());
 				if (distance < 5) {
-					Team victimTeam = TeamManager.carriers.get(player);
-					TeamManager.carriers.get(player).restoreBanner();
+					Team victimTeam = TeamManager.flagCarriers.get(player);
+					TeamManager.flagCarriers.get(player).restoreBanner();
 					Bukkit.broadcastMessage(ChatColor.AQUA + "=====================================================");
 					Bukkit.broadcastMessage(ChatColor.GREEN + "Player " + TeamManager.getPlayerColor(player) + player.getName() + ChatColor.GREEN + " captured " +
 							victimTeam.printTeamName() + ChatColor.GREEN + "'s flag and scored a point! Returning flag to base.");
@@ -51,7 +51,7 @@ public class CarrierListeners implements Listener {
 					Safezones.addTeam(victimTeam);
 					player.getInventory().remove(victimTeam.getBannerMaterial());
 					TeamManager.getPlayerTeam(player).addPoint();
-					TeamManager.carriers.remove(player);
+					TeamManager.flagCarriers.remove(player);
 				}
 			}
 		}
@@ -59,8 +59,8 @@ public class CarrierListeners implements Listener {
 	
 	@EventHandler
 	public void onDeath(PlayerDeathEvent event) {
-		if (TeamManager.carriers.containsKey(event.getEntity())) {	//If the dead player was carrying a flag
-			Team victimTeam = TeamManager.carriers.get(event.getEntity());	//Team of the stolen flag
+		if (TeamManager.flagCarriers.containsKey(event.getEntity())) {	//If the dead player was carrying a flag
+			Team victimTeam = TeamManager.flagCarriers.get(event.getEntity());	//Team of the stolen flag
 			//Remove flag from their drops
 			List<ItemStack> drops = event.getDrops();
 			ListIterator<ItemStack> litr = drops.listIterator();
@@ -84,7 +84,7 @@ public class CarrierListeners implements Listener {
 			
 			Bukkit.broadcastMessage(ChatColor.GREEN + "Team " + victimTeam.printTeamName() + ChatColor.GREEN + "'s flag was dropped! Will return to base after 30 seconds if not picked up.");
 			
-			TeamManager.carriers.remove(event.getEntity());	//Remove user from list of carriers
+			TeamManager.flagCarriers.remove(event.getEntity());	//Remove user from list of carriers
 			
 			//Wait 30s, check if flag is still there, if so, restore it to base
 			BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
@@ -121,22 +121,22 @@ public class CarrierListeners implements Listener {
 	
 	@EventHandler
 	public void onDisconnect(PlayerQuitEvent event) {
-		if(TeamManager.carriers.containsKey(event.getPlayer())) { 	//If disconnected player had the flag
+		if(TeamManager.flagCarriers.containsKey(event.getPlayer())) { 	//If disconnected player had the flag
 			event.getPlayer().setHealth(0);
-			TeamManager.carriers.remove(event.getPlayer());
+			TeamManager.flagCarriers.remove(event.getPlayer());
 		}
 	}
 	
 	@EventHandler
 	public void onHeld(PlayerItemHeldEvent event) {
-		if (TeamManager.carriers.containsKey(event.getPlayer())) {
+		if (TeamManager.flagCarriers.containsKey(event.getPlayer())) {
 			event.setCancelled(true);
 		}
 	}
 	
 	@EventHandler
 	public void onClick(InventoryClickEvent event) {
-		if (TeamManager.carriers.containsKey(event.getWhoClicked())) {
+		if (TeamManager.flagCarriers.containsKey(event.getWhoClicked())) {
 			event.setCancelled(true);
 		}
 	}

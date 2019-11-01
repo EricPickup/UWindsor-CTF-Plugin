@@ -15,6 +15,7 @@ public class CommandAddTeam {
 		} 
 		
 		try {
+			ChatColor.valueOf(args[2].toUpperCase());
 			String teamName = args[1];
 			String teamColor = args[2].toUpperCase();
 			if (TeamManager.addTeam(teamName, teamColor) == true) {

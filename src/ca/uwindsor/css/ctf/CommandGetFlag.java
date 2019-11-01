@@ -16,7 +16,7 @@ public class CommandGetFlag {
 			//Check if sender is console, console cannot belong to a team therefore they should enter a team name
 			sender.sendMessage("You must enter a team name from console!");
 			return true;
-		} else if (!TeamManager.containsTeam(args[1])) {
+		} else if (args.length == 2 && !TeamManager.containsTeam(args[1])) {
 			sender.sendMessage(ChatColor.RED + "Invalid team name! Choose from: " + String.join(", ", TeamManager.getTeamNames()));
 			return true;
 		}

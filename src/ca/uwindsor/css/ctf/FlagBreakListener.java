@@ -22,12 +22,12 @@ public class FlagBreakListener implements Listener {
 		
 		if (Tag.BANNERS.isTagged(eventBlock.getType())) {	//If banner is destroyed
 			
-			for (String team : Teams.getTeamNames()) {		//For each team
+			for (String team : TeamManager.getTeamNames()) {		//For each team
 				
 				Player player = event.getPlayer();
 				
-				if (Teams.getPlayerTeam(player) != null) {
-					Team attackerTeam = Teams.getPlayerTeam(player);
+				if (TeamManager.getPlayerTeam(player) != null) {
+					Team attackerTeam = TeamManager.getPlayerTeam(player);
 					if (Safezones.list.contains(attackerTeam)) {
 						event.setCancelled(true);
 						player.sendMessage(ChatColor.RED + "You cannot capture an enemy flag while your team is in the grace-period!");
@@ -35,7 +35,7 @@ public class FlagBreakListener implements Listener {
 					}
 				}
 				
-				Team victimTeam = Teams.getTeam(team);
+				Team victimTeam = TeamManager.getTeam(team);
 				
 				if (eventBlock.equals(victimTeam.getBannerBlock())) {			//IF FLAG BROKEN IS THE TEAM'S MAIN FLAG (FROM THEIR BASE)
 					
@@ -57,10 +57,10 @@ public class FlagBreakListener implements Listener {
 						eventBlock.setType(Material.AIR);
 						
 						ChatColor playerColor;
-						if (Teams.getPlayerTeam(player) == null) {	//Player is not part of team, set their chat color to white
+						if (TeamManager.getPlayerTeam(player) == null) {	//Player is not part of team, set their chat color to white
 							playerColor = ChatColor.WHITE;
 						} else {
-							playerColor = Teams.getPlayerColor(player);
+							playerColor = TeamManager.getPlayerColor(player);
 						}
 						
 						
@@ -83,7 +83,7 @@ public class FlagBreakListener implements Listener {
 						//Replacing held item slot with flag
 						player.getInventory().addItem(player.getItemInHand());
 						player.setItemInHand(i);
-						Teams.carriers.put(player, victimTeam);
+						TeamManager.carriers.put(player, victimTeam);
 				
 					}
 				} else if (eventBlock.equals(victimTeam.getStolenBanner())) {		//IF FLAG BROKEN IS THE TEAM'S TEMPORARY FLAG (already stolen, carrier was killed so flag is dropped on their body for 30s)
@@ -104,10 +104,10 @@ public class FlagBreakListener implements Listener {
 						eventBlock.setType(Material.AIR);
 						
 						ChatColor playerColor;
-						if (Teams.getPlayerTeam(player) == null) {	//Player is not part of team, set chat color to white
+						if (TeamManager.getPlayerTeam(player) == null) {	//Player is not part of team, set chat color to white
 							playerColor = ChatColor.WHITE;
 						} else {
-							playerColor = Teams.getPlayerColor(player);
+							playerColor = TeamManager.getPlayerColor(player);
 						}
 
 						Bukkit.broadcastMessage(ChatColor.DARK_RED + "=====================================================");
@@ -125,7 +125,7 @@ public class FlagBreakListener implements Listener {
 						//Replacing held item slot with flag
 						player.getInventory().addItem(player.getItemInHand());
 						player.setItemInHand(i);
-						Teams.carriers.put(player, victimTeam);
+						TeamManager.carriers.put(player, victimTeam);
 					}
 					
 				}

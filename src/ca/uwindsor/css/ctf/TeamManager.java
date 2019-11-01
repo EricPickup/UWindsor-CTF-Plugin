@@ -11,7 +11,7 @@ import net.md_5.bungee.api.ChatColor;
 
 //Contains list of players with their associating teams
 
-public class Teams {
+public class TeamManager {
 	
 	private static HashMap<String, Team> teams = new HashMap<String, Team>();	//Key: TeamName, Value: TeamObject
 	public static HashMap<Player, Team> carriers = new HashMap<Player, Team>();	//Key: flagCarrier (Player), Value: Victim Team (Team)
@@ -77,7 +77,7 @@ public class Teams {
 	}
 	
 	public static void purgePayer(Player player) {
-		for (Team team : Teams.teams.values()) {
+		for (Team team : TeamManager.teams.values()) {
 			if (team.containsPlayer(player)) {
 				team.removePlayer(player);
 			}

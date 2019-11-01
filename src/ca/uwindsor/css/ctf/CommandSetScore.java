@@ -17,8 +17,8 @@ public class CommandSetScore {
 		
 		String teamName = args[1];
 		
-		if (!Teams.containsTeam(teamName)) {
-			sender.sendMessage(ChatColor.RED + "Invalid team name! Choose from: " + String.join(", ", Teams.getTeamNames()));
+		if (!TeamManager.containsTeam(teamName)) {
+			sender.sendMessage(ChatColor.RED + "Invalid team name! Choose from: " + String.join(", ", TeamManager.getTeamNames()));
 			return true;
 		}
 		
@@ -30,7 +30,7 @@ public class CommandSetScore {
 			return true;
 		}
 		
-		Teams.getTeam(teamName).setScore(Integer.parseInt(args[2]));
+		TeamManager.getTeam(teamName).setScore(Integer.parseInt(args[2]));
 		
 		
 		

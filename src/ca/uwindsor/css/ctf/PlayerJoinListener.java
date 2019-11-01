@@ -15,10 +15,10 @@ public class PlayerJoinListener implements Listener {
 		Player player = event.getPlayer();
 		player.setScoreboard(Main.board);
 		
-		if (Teams.getPlayerTeam(player) != null) {
+		if (TeamManager.getPlayerTeam(player) != null) {
 			//Re-assigning display/list name since bukkit does not save these
-			player.setDisplayName(Teams.getPlayerTeam(player).getColor() + player.getName() + ChatColor.RESET);
-			player.setPlayerListName(Teams.getPlayerTeam(player).getColor() + player.getName() + ChatColor.RESET);
+			player.setDisplayName(TeamManager.getPlayerTeam(player).getColor() + player.getName() + ChatColor.RESET);
+			player.setPlayerListName(TeamManager.getPlayerTeam(player).getColor() + player.getName() + ChatColor.RESET);
 		}
 		
 	}

@@ -21,10 +21,10 @@ public class CommandGetTeam {
 
 		if (player == null) {
 			sender.sendMessage(ChatColor.RED + "Invalid user!");
-		} else if (Teams.getPlayerTeam(player) == null) {
+		} else if (TeamManager.getPlayerTeam(player) == null) {
 			sender.sendMessage(ChatColor.GREEN + "User " + player.getDisplayName() + ChatColor.GREEN + " is not part of a team.");
 		} else {
-			sender.sendMessage(ChatColor.GREEN + "Player "+ player.getDisplayName() + ChatColor.GREEN + " is part of team " + Teams.getPlayerTeam(player).printTeamName() + ChatColor.GREEN + ".");
+			sender.sendMessage(ChatColor.GREEN + "Player "+ player.getDisplayName() + ChatColor.GREEN + " is part of team " + TeamManager.getPlayerTeam(player).printTeamName() + ChatColor.GREEN + ".");
 		}
 	
 		 return true;

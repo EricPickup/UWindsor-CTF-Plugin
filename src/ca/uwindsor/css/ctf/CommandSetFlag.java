@@ -23,23 +23,23 @@ public class CommandSetFlag {
 		Team team;
 		
 		if (args.length == 1) {	//If command entered is in format: /teams setflag
-			if (Teams.getPlayerTeam(player) == null) {
+			if (TeamManager.getPlayerTeam(player) == null) {
 				sender.sendMessage(ChatColor.RED + "You are not part of a team!");
 				return true;
 			}
-			team = Teams.getPlayerTeam(player);
+			team = TeamManager.getPlayerTeam(player);
 			
 		} else if (player.isOp()) {	//If command entered is in format: /teams setflag <teamName> - check if player is op
 			
 			String teamName = args[1].toUpperCase();
-			if (!Teams.containsTeam(teamName)) {
-				sender.sendMessage(ChatColor.RED + "Invalid team name! Choose from: " + String.join(", ", Teams.getTeamNames()));
+			if (!TeamManager.containsTeam(teamName)) {
+				sender.sendMessage(ChatColor.RED + "Invalid team name! Choose from: " + String.join(", ", TeamManager.getTeamNames()));
 				return true;
-			} else if (Teams.getTeam(teamName).getStolenStatus() == true) {
+			} else if (TeamManager.getTeam(teamName).getStolenStatus() == true) {
 				sender.sendMessage(ChatColor.RED + "You cannot place your flag while it is stolen!");
 				return true;
 			} else {
-				team = Teams.getTeam(teamName);
+				team = TeamManager.getTeam(teamName);
 			}
 			
 		} else {	//Otherwise, player is not op, reject permissions
@@ -48,7 +48,7 @@ public class CommandSetFlag {
 		}
 		
 		for (Player teamMember : team.getPlayers()) {
-			if (Teams.carriers.containsKey(teamMember)) {
+			if (TeamManager.carriers.containsKey(teamMember)) {
 				player.sendMessage(ChatColor.RED + "You cannot change your flag location while one of your team members is carrying an enemy flag!");
 				return true;
 			}
@@ -81,10 +81,10 @@ public class CommandSetFlag {
 	public static boolean enemiesNearBanner(Team team) {
 		for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 			double distance = player.getLocation().distance(team.getBannerSpawn());
-			System.out.println("Player's team: " +  Teams.getPlayerTeam(player));
+			System.out.println("Player's team: " +  TeamManager.getPlayerTeam(player));
 			System.out.print("Current team's name: " + team.getName());
 			
-			if (distance < 150 && (Teams.getPlayerTeam(player) == null || !Teams.getPlayerTeam(player).equals(team))) {
+			if (distance < 150 && (TeamManager.getPlayerTeam(player) == null || !TeamManager.getPlayerTeam(player).equals(team))) {
 				return true;
 			}
 		}

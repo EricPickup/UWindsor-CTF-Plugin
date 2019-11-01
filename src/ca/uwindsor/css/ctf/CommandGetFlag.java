@@ -19,8 +19,8 @@ public class CommandGetFlag {
 				return true;
 			}
 		} else {
-			if (!Teams.containsTeam(args[1])) {
-				sender.sendMessage(ChatColor.RED + "Invalid team name! Choose from: " + String.join(", ", Teams.getTeamNames()));
+			if (!TeamManager.containsTeam(args[1])) {
+				sender.sendMessage(ChatColor.RED + "Invalid team name! Choose from: " + String.join(", ", TeamManager.getTeamNames()));
 				return true;
 			}
 		}
@@ -29,14 +29,14 @@ public class CommandGetFlag {
 		if (sender instanceof Player) {
 			if (args.length <= 1) {
 				sender.sendMessage(ChatColor.RED + "Invalid arguments: /teams getflag <team>");
-			} else if (!Teams.getTeam(args[1].toUpperCase()).hasBanner()) {
+			} else if (!TeamManager.getTeam(args[1].toUpperCase()).hasBanner()) {
 				sender.sendMessage(ChatColor.RED + "Team does not have a banner placed.");
 			} else {
 				String team = args[1].toUpperCase();
 				args[1] = team;
 				Player player = (Player) sender;
-				player.sendMessage(Teams.getTeam(team).printTeamName() + ChatColor.GREEN + 
-						" team's flag is located at: " + Teams.getTeam(team).getBannerCoordinates());
+				player.sendMessage(TeamManager.getTeam(team).printTeamName() + ChatColor.GREEN + 
+						" team's flag is located at: " + TeamManager.getTeam(team).getBannerCoordinates());
 			}
 		}
 		return true;

@@ -25,10 +25,10 @@ public class SafezoneListener implements Listener {
 				event.setCancelled(true);
 				if (violationsPerPlayer.containsKey(player)) {
 					if (violationsPerPlayer.get(player) > 50) {	//If the player has violated more than 30 times (most likely stuck)
-						if (Teams.getPlayerTeam(player) == null) {		//If they are not part of a team, teleport them to spanw
+						if (TeamManager.getPlayerTeam(player) == null) {		//If they are not part of a team, teleport them to spanw
 							player.teleport(player.getWorld().getSpawnLocation());
 						} else {	//If they do belong to a team, teleport them to their own flag
-							player.teleport(Teams.getPlayerTeam(player).getBannerSpawn());
+							player.teleport(TeamManager.getPlayerTeam(player).getBannerSpawn());
 						}
 						player.sendMessage(ChatColor.GREEN + "Teleported you back to base, detected that you were stuck.");
 						violationsPerPlayer.remove(player);

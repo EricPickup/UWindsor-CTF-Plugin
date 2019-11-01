@@ -260,7 +260,7 @@ public class Team {
 		}
 		this.scoreboardTeam.unregister();
 		Main.board.resetScores(printTeamName() + ":");
-		Teams.availableColors.add(getColorString());
+		TeamManager.availableColors.add(getColorString());
 	}
 	
 }

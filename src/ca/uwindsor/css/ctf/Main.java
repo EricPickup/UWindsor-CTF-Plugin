@@ -71,15 +71,15 @@ public class Main extends JavaPlugin {
         if (getConfig().getConfigurationSection("Teams") != null) {
         	for (String team : getConfig().getConfigurationSection("Teams").getKeys(false)) {
             	String path = "Teams." + team;
-            	Teams.addTeam(getConfig().getString(path + ".name"), getConfig().getString(path + ".color"));	//Add the team
+            	TeamManager.addTeam(getConfig().getString(path + ".name"), getConfig().getString(path + ".color"));	//Add the team
             	currentTeamMembers = getConfig().getStringList(path + ".members");
             	for (String member : currentTeamMembers) {	//Adding members to team
-            		Teams.getTeam(team).addPlayerByName(member);
+            		TeamManager.getTeam(team).addPlayerByName(member);
             	}
-            	Teams.getTeam(team).setScore(getConfig().getInt(path + ".score"));	//Adding team to scoreboard
+            	TeamManager.getTeam(team).setScore(getConfig().getInt(path + ".score"));	//Adding team to scoreboard
             	if (!getConfig().getString(path + ".bannerLocation").equals("null")) {	//If they have a banner placed
             		String[] coords = getConfig().getString(path + ".bannerLocation").split("\\s+");
-            		Teams.getTeam(team).addBannerByCoords(coords);
+            		TeamManager.getTeam(team).addBannerByCoords(coords);
             	}
             }
         } else {
@@ -91,7 +91,7 @@ public class Main extends JavaPlugin {
     
     public void saveConfiguration() {
     	getConfig().set("Teams", "");
-    	for (Team team : Teams.getTeamsValues()) {
+    	for (Team team : TeamManager.getTeamsValues()) {
     		String tableName = team.getName().toUpperCase();
     		String configPath = "Teams." + tableName;
     		getConfig().set(configPath + ".name", team.getName());
@@ -101,7 +101,7 @@ public class Main extends JavaPlugin {
     		} else {
     			getConfig().set(configPath + ".bannerLocation", team.getBannerCoordinatesConfig());
     		}
-    		getConfig().set(configPath + ".members", Teams.getTeam(tableName).members);
+    		getConfig().set(configPath + ".members", TeamManager.getTeam(tableName).members);
     		getConfig().set(configPath + ".score", team.getScore());
     		System.out.println("Saved info for team " + tableName);
     	}
@@ -154,16 +154,16 @@ public class Main extends JavaPlugin {
     }
     
     public void loadColors() {
-    	Teams.availableColors.add("RED");
-		Teams.availableColors.add("AQUA");
-		Teams.availableColors.add("GOLD");
-		Teams.availableColors.add("GRAY");
-		Teams.availableColors.add("GREEN");
-		Teams.availableColors.add("YELLOW");
-		Teams.availableColors.add("BLUE");
-		Teams.availableColors.add("LIGHT_PURPLE");
-		Teams.availableColors.add("DARK_PURPLE");
-		Teams.availableColors.add("WHITE");
+    	TeamManager.availableColors.add("RED");
+		TeamManager.availableColors.add("AQUA");
+		TeamManager.availableColors.add("GOLD");
+		TeamManager.availableColors.add("GRAY");
+		TeamManager.availableColors.add("GREEN");
+		TeamManager.availableColors.add("YELLOW");
+		TeamManager.availableColors.add("BLUE");
+		TeamManager.availableColors.add("LIGHT_PURPLE");
+		TeamManager.availableColors.add("DARK_PURPLE");
+		TeamManager.availableColors.add("WHITE");
     }
     
     public void initializeCompasses() {
@@ -174,8 +174,8 @@ public class Main extends JavaPlugin {
 				for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 					double minDistance = 999999;
 					Location closestFlag = null;
-					for (Team team : Teams.getTeamsValues()) {
-						if (Teams.getPlayerTeam(player) != null && !(Teams.getPlayerTeam(player).equals(team))) {
+					for (Team team : TeamManager.getTeamsValues()) {
+						if (TeamManager.getPlayerTeam(player) != null && !(TeamManager.getPlayerTeam(player).equals(team))) {
 							double distanceFromEnemyTeam = player.getLocation().distance(team.getBannerSpawn());
 							if (distanceFromEnemyTeam < minDistance) {
 								minDistance = distanceFromEnemyTeam;

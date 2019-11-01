@@ -18,7 +18,7 @@ public class CommandAddTeam {
 			ChatColor.valueOf(args[2].toUpperCase());
 			String teamColor = args[2].toUpperCase();
 			String teamName = args[1];
-			if (Teams.addTeam(teamName, teamColor) == true) {
+			if (TeamManager.addTeam(teamName, teamColor) == true) {
 				sender.sendMessage(ChatColor.GREEN + "Successfully added team " + ChatColor.valueOf(teamColor) + ChatColor.BOLD + teamName + 
 				ChatColor.RESET + ChatColor.GREEN + " to list of teams.");
 			} else {
@@ -26,7 +26,7 @@ public class CommandAddTeam {
 			}
 			
 		} catch (IllegalArgumentException e) {
-			sender.sendMessage(ChatColor.RED + "Invalid color. Please choose from: " + String.join(", ", Teams.availableColors));
+			sender.sendMessage(ChatColor.RED + "Invalid color. Please choose from: " + String.join(", ", TeamManager.availableColors));
 		}
 		return true; 
 		

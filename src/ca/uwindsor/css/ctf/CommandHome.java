@@ -24,7 +24,7 @@ public class CommandHome implements Listener {
 			
 			Player player = (Player) sender;
 			
-			if (Teams.carriers.containsKey(player)) {
+			if (TeamManager.carriers.containsKey(player)) {
 				player.sendMessage(ChatColor.RED + "You cannot teleport while carrying the flag!");
 				return true;
 			}
@@ -39,8 +39,8 @@ public class CommandHome implements Listener {
 					if (waiting.containsKey(player)) {
 						player.sendMessage(ChatColor.BLUE + "Teleporting you to base...");
 						waiting.remove(player);
-						if (Teams.getPlayerTeam(player) != null) {
-							player.teleport(Teams.getPlayerTeam(player).getBannerSpawn());
+						if (TeamManager.getPlayerTeam(player) != null) {
+							player.teleport(TeamManager.getPlayerTeam(player).getBannerSpawn());
 						} else {
 							player.sendMessage(ChatColor.RED + "You are not a part of a team therefore you cannot be teleported to base!");
 						}

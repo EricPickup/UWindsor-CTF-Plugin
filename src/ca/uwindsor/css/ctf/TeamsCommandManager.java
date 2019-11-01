@@ -11,77 +11,76 @@ public class TeamsCommandManager implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		
 		if (args.length == 0) {
 			//HELP PAGE
 			sender.sendMessage(helpMessage(sender));
-		} else {
-			if (args[0].equalsIgnoreCase("create")) {	//	/teams create <teamName> <teamColor>
-				if (sender.isOp()) {
-					CommandAddTeam.onCommand(sender, command, label, args);
-				} else {
-					denyPermissions(sender);
-				}
-			} else if (args[0].equalsIgnoreCase("list")) {	//	/teams list
-				//list teams
-				CommandGetTeams.onCommand(sender, command, label, args);
-			} else if (args[0].equalsIgnoreCase("add")) {	//	/teams add <player> <toTeam>
-				//add player to team
-				if (sender.isOp()) {
-					CommandSetTeam.onCommand(sender, command, label, args);
-				} else {
-					denyPermissions(sender);
-				}
-			} else if (args[0].equalsIgnoreCase("remove")) {	//	/teams remove <player> <fromTeam>
-				//remove player from team
-				if (sender.isOp()) {
-					CommandRemovePlayer.onCommand(sender, command, label, args);
-				} else {
-					denyPermissions(sender);
-				}
-			} else if (args[0].equalsIgnoreCase("get")) {	//	/teams get <player>
-				//get user's team
-				CommandGetTeam.onCommand(sender, command, label, args);
-			} else if (args[0].equalsIgnoreCase("info")) {	//	/teams info <team>
-				//list team's users
-			} else if (args[0].equalsIgnoreCase("getflag")) {	//	/teams getflag <team>
-				//get flag location
-				if (sender.isOp()) {
-					CommandGetFlag.onCommand(sender, command, label, args);
-				} else {
-					denyPermissions(sender);
-				}
-			} else if (args[0].equalsIgnoreCase("setflag")) {	//	/teams setflag <team>
-				//sets flag location for team
-				CommandSetFlag.onCommand(sender, command, label, args);
-			} else if (args[0].equalsIgnoreCase("help")) {
-				sender.sendMessage(helpMessage(sender));
-			} else if (args[0].equalsIgnoreCase("delete")) {
-				if (sender.isOp()) {
-					CommandDeleteTeam.onCommand(sender, command, label, args);
-				} else {
-					denyPermissions(sender);
-				}
-			} else if (args[0].equalsIgnoreCase("home")) {
-				CommandHome.onCommand(sender, command, label, args);
-			} else if (args[0].equalsIgnoreCase("setscore")) {	//	/teams getflag <team>
-				if (sender.isOp()) {
-					CommandSetScore.onCommand(sender, command, label, args);
-				} else {
-					denyPermissions(sender);
-				}
-			} else if (args[0].equalsIgnoreCase("pvp")) {
-				if (sender.isOp()) {
-					CommandPvP.onCommand(sender, command, label, args);
-				} else {
-					denyPermissions(sender);
-				}
-				
-			}
+			return true;
 		}
-		
+
+		String subCommand = args[0];
+		if (subCommand.equalsIgnoreCase("create")) {	//	/teams create <teamName> <teamColor>
+			if (sender.isOp()) {
+				CommandAddTeam.onCommand(sender, command, label, args);
+			} else {
+				denyPermissions(sender);
+			}
+		} else if (subCommand.equalsIgnoreCase("list")) {	//	/teams list
+			//list teams
+			CommandGetTeams.onCommand(sender, command, label, args);
+		} else if (subCommand.equalsIgnoreCase("add")) {	//	/teams add <player> <toTeam>
+			//add player to team
+			if (sender.isOp()) {
+				CommandSetTeam.onCommand(sender, command, label, args);
+			} else {
+				denyPermissions(sender);
+			}
+		} else if (subCommand.equalsIgnoreCase("remove")) {	//	/teams remove <player> <fromTeam>
+			//remove player from team
+			if (sender.isOp()) {
+				CommandRemovePlayer.onCommand(sender, command, label, args);
+			} else {
+				denyPermissions(sender);
+			}
+		} else if (subCommand.equalsIgnoreCase("get")) {	//	/teams get <player>
+			//get user's team
+			CommandGetTeam.onCommand(sender, command, label, args);
+		} else if (subCommand.equalsIgnoreCase("info")) {	//	/teams info <team>
+			//list team's users
+		} else if (subCommand.equalsIgnoreCase("getflag")) {	//	/teams getflag <team>
+			//get flag location
+			if (sender.isOp()) {
+				CommandGetFlag.onCommand(sender, command, label, args);
+			} else {
+				denyPermissions(sender);
+			}
+		} else if (subCommand.equalsIgnoreCase("setflag")) {	//	/teams setflag <team>
+			//sets flag location for team
+			CommandSetFlag.onCommand(sender, command, label, args);
+		} else if (subCommand.equalsIgnoreCase("help")) {
+			sender.sendMessage(helpMessage(sender));
+		} else if (subCommand.equalsIgnoreCase("delete")) {
+			if (sender.isOp()) {
+				CommandDeleteTeam.onCommand(sender, command, label, args);
+			} else {
+				denyPermissions(sender);
+			}
+		} else if (subCommand.equalsIgnoreCase("home")) {
+			CommandHome.onCommand(sender, command, label, args);
+		} else if (subCommand.equalsIgnoreCase("setscore")) {	//	/teams getflag <team>
+			if (sender.isOp()) {
+				CommandSetScore.onCommand(sender, command, label, args);
+			} else {
+				denyPermissions(sender);
+			}
+		} else if (subCommand.equalsIgnoreCase("pvp")) {
+			if (sender.isOp()) {
+				CommandPvP.onCommand(sender, command, label, args);
+			} else {
+				denyPermissions(sender);
+			}
+			
+		}
 		return true;
-		
 	}
 	
 	

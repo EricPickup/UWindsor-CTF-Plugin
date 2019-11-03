@@ -28,7 +28,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import net.md_5.bungee.api.ChatColor;
 
-public class CarrierListeners implements Listener {
+public class FlagCarrierListener implements Listener {
 
 	@EventHandler
 	public void onMove(PlayerMoveEvent event) {

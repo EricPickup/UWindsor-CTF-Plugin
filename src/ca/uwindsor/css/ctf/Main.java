@@ -33,7 +33,7 @@ public class Main extends JavaPlugin {
     	getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
     	getServer().getPluginManager().registerEvents(new FlagIndirectBreakListener(), this);
     	getServer().getPluginManager().registerEvents(new PlayerDamageListener(), this);
-    	getServer().getPluginManager().registerEvents(new CarrierListeners(), this);
+    	getServer().getPluginManager().registerEvents(new FlagCarrierListener(), this);
     	getServer().getPluginManager().registerEvents(new SafezoneListener(), this);
     	getServer().getPluginManager().registerEvents(new CommandHome(), this);
     	

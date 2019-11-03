@@ -133,6 +133,4 @@ public class FlagBreakListener implements Listener {
 		}
 		
 	}
-
-	
 }

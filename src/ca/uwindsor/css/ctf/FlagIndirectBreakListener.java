@@ -1,6 +1,7 @@
 package ca.uwindsor.css.ctf;
 
 import java.util.Iterator;
+
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -17,7 +18,6 @@ public class FlagIndirectBreakListener implements Listener {
 	public void onPhysics(BlockPhysicsEvent event) {
 		
 		Block eventBlock = event.getBlock();
-		
 		if (Tag.BANNERS.isTagged(eventBlock.getType())) {	//If banner is destroyed
 			event.setCancelled(true);
 		}

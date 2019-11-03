@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
@@ -55,6 +56,9 @@ public class Team {
 	
 	public void addPoint() {
 		this.score.setScore(this.score.getScore() + 1);
+		for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+			player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 10f, 0.5f);
+		}
 	}
 	
 	public void addPlayer(Player player) {

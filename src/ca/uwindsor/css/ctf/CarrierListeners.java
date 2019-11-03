@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.Banner;
@@ -53,6 +54,7 @@ public class CarrierListeners implements Listener {
 					player.getInventory().remove(victimTeam.getBannerMaterial());
 					playerTeam.addPoint();
 					TeamManager.flagCarriers.remove(player);
+					victimTeam.getBannerSpawn().getWorld().spawnParticle(Particle.FIREWORKS_SPARK, playerTeam.getBannerSpawn(), 150);
 				}
 			}
 		}

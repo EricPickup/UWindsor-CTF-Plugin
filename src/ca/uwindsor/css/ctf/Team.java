@@ -40,7 +40,7 @@ public class Team {
 		this.scoreboardTeam.setPrefix(getColor().toString());
 		this.flagStolen = false;
 		this.bannerSpawnLocation = new Location(Bukkit.getServer().getWorlds().get(0),0,0,0);
-		this.score = Main.board.getObjective("Team Scores").getScore(printTeamName() + ":");
+		this.score = Main.board.getObjective("Scoreboard").getScore(printTeamName() + ":");
 		this.score.setScore(0);
 		setBannerColor();
 	}

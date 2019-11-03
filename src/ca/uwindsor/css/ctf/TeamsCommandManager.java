@@ -78,7 +78,12 @@ public class TeamsCommandManager implements CommandExecutor {
 			} else {
 				denyPermissions(sender);
 			}
-			
+		} else if (subCommand.equalsIgnoreCase("start")) {
+			if (sender.isOp()) {
+				CommandStart.onCommand(sender, command, label, args);
+			} else {
+				denyPermissions(sender);
+			}
 		}
 		return true;
 	}
@@ -103,6 +108,7 @@ public class TeamsCommandManager implements CommandExecutor {
 			message += "\n" + ChatColor.AQUA + "/teams get <player>" + ChatColor.GREEN + " - get the specified user's team name";
 			message += "\n" + ChatColor.AQUA + "/teams info <teamName>" + ChatColor.GREEN + " - list info about the specified team";
 			message += "\n" + ChatColor.AQUA + "/teams pvp true/false" + ChatColor.GREEN + " - enable or disable pvp manually";
+			message += "\n" + ChatColor.AQUA + "/teams start <timeInSeconds>" + ChatColor.GREEN + " - start the countdown to game";
 		} else {
 		//REGULAR COMMANDS
 			message += "\n" + ChatColor.AQUA + "/teams help" + ChatColor.GREEN + " - list help menu for plugin";

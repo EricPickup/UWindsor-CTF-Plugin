@@ -19,6 +19,7 @@ import org.bukkit.scoreboard.Scoreboard;
 public class Main extends JavaPlugin {
 	
 	public static Scoreboard board;
+	public static Scoreboard timerBoard;
 	public static HashMap<Score, Integer> scores;
 	public static boolean pvpEnabled = false;
 	// Fired when first enabled
@@ -130,7 +131,7 @@ public class Main extends JavaPlugin {
     
     public void constructScoreboard() {
 		//Constructing side scoreboard
-		Objective objective = board.registerNewObjective("Team Scores", "Team Scores");
+		Objective objective = board.registerNewObjective("Scoreboard", "Scoreboard");
 		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 		objective.setDisplayName("Team Scores");
 
@@ -191,5 +192,4 @@ public class Main extends JavaPlugin {
 			}
 		}, 0L, 250L);
     }
-    
 }

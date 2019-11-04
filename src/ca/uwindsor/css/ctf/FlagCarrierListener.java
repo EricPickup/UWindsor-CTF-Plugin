@@ -22,6 +22,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -138,7 +139,14 @@ public class FlagCarrierListener implements Listener {
 
 	@EventHandler
 	public void onPickup(EntityPickupItemEvent event) {
-		if(Tag.BANNERS.isTagged(event.getItem().getItemStack().getType())) {
+		if (Tag.BANNERS.isTagged(event.getItem().getItemStack().getType())) {
+			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler
+	public void onHandSwap(PlayerSwapHandItemsEvent event) {
+		if (Tag.BANNERS.isTagged(event.getMainHandItem().getType()) || Tag.BANNERS.isTagged(event.getOffHandItem().getType())) {
 			event.setCancelled(true);
 		}
 	}

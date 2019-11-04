@@ -129,7 +129,6 @@ public class FlagBreakListener implements Listener {
 						player.setItemInHand(i);
 						TeamManager.flagCarriers.put(player, victimTeam);
 					}
-					
 				}
 			}
 		}

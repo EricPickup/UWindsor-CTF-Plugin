@@ -2,6 +2,7 @@ package ca.uwindsor.css.ctf;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -10,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -84,7 +86,7 @@ public class FlagBreakListener implements Listener {
 						player.getInventory().addItem(player.getItemInHand());
 						player.setItemInHand(i);
 						TeamManager.flagCarriers.put(player, victimTeam);
-				
+						playAlarmForVictimTeam(victimTeam);
 					}
 				} else if (eventBlock.equals(victimTeam.getStolenBanner())) {		//IF FLAG BROKEN IS THE TEAM'S TEMPORARY FLAG (already stolen, carrier was killed so flag is dropped on their body for 30s)
 					
@@ -131,6 +133,21 @@ public class FlagBreakListener implements Listener {
 				}
 			}
 		}
-		
+	}
+
+	public void playAlarmForVictimTeam(Team victimTeam) {
+		new BukkitRunnable() {
+			int count = 0;
+			public void run() {
+				if (count < 10) {
+					for (Player p : victimTeam.getPlayers()) {
+						p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_FLUTE, 10, 4);
+					}
+				} else {
+					this.cancel();
+				}
+				count++;
+			}
+		}.runTaskTimer(Main.getPlugin(Main.class), 0L, 3L);
 	}
 }

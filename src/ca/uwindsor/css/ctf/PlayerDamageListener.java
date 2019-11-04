@@ -27,7 +27,7 @@ public class PlayerDamageListener implements Listener {
 		}
 		
 		//Check if PVP is enabled
-		if (event.getDamager() instanceof Player && Main.pvpEnabled == false) {
+		if (event.getDamager() instanceof Player && event.getEntity() instanceof Player && Main.pvpEnabled == false) {
 			event.setCancelled(true);
 			event.getDamager().sendMessage(ChatColor.RED + "PvP is currently disabled!");
 			return;

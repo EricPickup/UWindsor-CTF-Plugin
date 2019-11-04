@@ -12,6 +12,7 @@ import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -37,8 +38,8 @@ public class FlagCarrierListener implements Listener {
 		if (playerIsCarryingFlag(player)) {
 			
 			Location abovePlayer = new Location(player.getWorld(),player.getLocation().getX(), player.getLocation().getY() + 1, player.getLocation().getZ());
-			player.getLocation().getWorld().playEffect(player.getLocation(), Effect.SMOKE, 10);
-			abovePlayer.getWorld().playEffect(abovePlayer, Effect.SMOKE, 10);
+			player.getLocation().getWorld().playEffect(player.getLocation(), Effect.ENDER_SIGNAL, 8);
+			abovePlayer.getWorld().playEffect(abovePlayer, Effect.ENDER_SIGNAL, 8);
 			
 			Team playerTeam = TeamManager.getPlayerTeam(player);
 			if (playerTeam != null) {
@@ -66,40 +67,45 @@ public class FlagCarrierListener implements Listener {
 			Team victimTeam = TeamManager.flagCarriers.get(event.getEntity());	//Team of the stolen flag
 			Material flagMaterial = victimTeam.getBannerMaterial();
 			removeFlagFropDrops(event.getDrops(), flagMaterial);
-
-			Location tempFlagLocation = event.getEntity().getLocation();
-			placeTemporaryBanner(event.getEntity().getLocation(), flagMaterial, victimTeam);
-			
-			Bukkit.broadcastMessage(ChatColor.GREEN + "Team " + victimTeam.printTeamName() + ChatColor.GREEN + "'s flag was dropped! Will return to base after 30 seconds if not picked up.");
-			
-			TeamManager.flagCarriers.remove(event.getEntity());	//Remove user from list of carriers
-			
-			//Wait 30s, check if flag is still there, if so, restore it to base
-			BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-			scheduler.scheduleSyncDelayedTask(JavaPlugin.getPlugin(Main.class), new Runnable() {
-				@Override
-				public void run() {
-					World w = Bukkit.getServer().getWorlds().get(0);
-					if (w.getBlockAt(tempFlagLocation).getType().equals(victimTeam.getBannerMaterial())) {
-						victimTeam.restoreBanner();
-						Bukkit.broadcastMessage(ChatColor.AQUA + "=====================================================");
-						Bukkit.broadcastMessage(ChatColor.GREEN + "Team " + victimTeam.printTeamName() + ChatColor.GREEN + 
-								"'s flag was restored to base!");
-						Bukkit.broadcastMessage(ChatColor.AQUA + "=====================================================");
-					}
-				}
-			}, 600L);
+			dropFlag(victimTeam, event.getEntity());
 		}
 	}
 	
+	public void dropFlag(Team victimTeam, Entity player) {
+		Material flagMaterial = victimTeam.getBannerMaterial();
+		Location tempFlagLocation = player.getLocation();
+		placeTemporaryBanner(player.getLocation(), flagMaterial, victimTeam);
+		Bukkit.broadcastMessage(ChatColor.GREEN + "Team " + victimTeam.printTeamName() + ChatColor.GREEN + "'s flag was dropped! Will return to base after 30 seconds if not picked up.");
+		TeamManager.flagCarriers.remove(player);	//Remove user from list of carriers
+
+		//Wait 30s, check if flag is still there, if so, restore it to base
+		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
+		scheduler.scheduleSyncDelayedTask(JavaPlugin.getPlugin(Main.class), new Runnable() {
+			@Override
+			public void run() {
+				World w = Bukkit.getServer().getWorlds().get(0);
+				if (w.getBlockAt(tempFlagLocation).getType().equals(victimTeam.getBannerMaterial())) {
+					victimTeam.restoreBanner();
+					Bukkit.broadcastMessage(ChatColor.AQUA + "=====================================================");
+					Bukkit.broadcastMessage(ChatColor.GREEN + "Team " + victimTeam.printTeamName() + ChatColor.GREEN + 
+							"'s flag was restored to base!");
+					Bukkit.broadcastMessage(ChatColor.AQUA + "=====================================================");
+				}
+			}
+		}, 600L);
+	}
+
 	@EventHandler
 	public void onDrop(PlayerDropItemEvent event) {
 		if (Tag.BANNERS.isTagged(event.getItemDrop().getItemStack().getType())) {
-			event.setCancelled(true);
-			event.getPlayer().sendMessage(ChatColor.RED + "You cannot drop the flag!");
+			Player player = event.getPlayer();
+			Team victimTeam = TeamManager.flagCarriers.get(player);	//Team of the stolen flag
+			player.getInventory().remove(player.getItemInHand());
+			event.getItemDrop().remove();
+			dropFlag(victimTeam, player);
 		}
 	}
-	
+
 	@EventHandler
 	public void place(BlockPlaceEvent event) {
 		if (Tag.BANNERS.isTagged(event.getBlock().getType())) {
@@ -107,7 +113,7 @@ public class FlagCarrierListener implements Listener {
 			event.getPlayer().sendMessage(ChatColor.RED + "You cannot place banners manually!");
 		}
 	}
-	
+
 	@EventHandler
 	public void onDisconnect(PlayerQuitEvent event) {
 		if(TeamManager.flagCarriers.containsKey(event.getPlayer())) { 	//If disconnected player had the flag

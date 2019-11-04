@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -132,6 +133,13 @@ public class FlagCarrierListener implements Listener {
 	@EventHandler
 	public void onClick(InventoryClickEvent event) {
 		if (TeamManager.flagCarriers.containsKey(event.getWhoClicked())) {
+			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler
+	public void onPickup(EntityPickupItemEvent event) {
+		if(Tag.BANNERS.isTagged(event.getItem().getItemStack().getType())) {
 			event.setCancelled(true);
 		}
 	}

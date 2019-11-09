@@ -34,12 +34,11 @@ public class PlayerDamageListener implements Listener {
 		}
 		
 		//Check if PvP is inside spawn
-		if (event.getEntity() instanceof Player && event.getEntity().getLocation().distance(event.getEntity().getWorld().getSpawnLocation()) < 20) {
+		if (event.getEntity() instanceof Player && event.getEntity().getLocation().distance(event.getEntity().getWorld().getSpawnLocation()) < 30) {
 			event.getDamager().sendMessage(ChatColor.RED + "PvP is disabled in spawn!");
 			event.setCancelled(true);
 			return;
 		}
 		
 	}
-
 }

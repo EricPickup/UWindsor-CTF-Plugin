@@ -47,6 +47,11 @@ public class CommandSetFlag {
 			return true;
 		}
 		
+		if (team.getBannerBlock() != null) {
+			player.sendMessage(ChatColor.RED + "You've already placed your flag!");
+			return true;
+		}
+		
 		for (Player teamMember : team.getPlayers()) {
 			if (TeamManager.flagCarriers.containsKey(teamMember)) {
 				player.sendMessage(ChatColor.RED + "You cannot change your flag location while one of your team members is carrying an enemy flag!");

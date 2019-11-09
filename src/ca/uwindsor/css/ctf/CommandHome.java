@@ -1,6 +1,8 @@
 package ca.uwindsor.css.ctf;
 
 import java.util.HashMap;
+import java.util.HashSet;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -17,6 +19,7 @@ import net.md_5.bungee.api.ChatColor;
 public class CommandHome implements Listener {
 	
 	public static HashMap<Player, Integer> waiting = new HashMap<Player, Integer>();
+	public static HashSet<Player> cooldown = new HashSet<Player>();
 
 	public static boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
@@ -26,6 +29,11 @@ public class CommandHome implements Listener {
 			
 			if (TeamManager.flagCarriers.containsKey(player)) {
 				player.sendMessage(ChatColor.RED + "You cannot teleport while carrying the flag!");
+				return true;
+			}
+			
+			if (cooldown.contains(player)) {
+				player.sendMessage(ChatColor.RED + "You are on a teleport cooldown after dying! You must wait 2 minutes after death to teleport home.");
 				return true;
 			}
 			

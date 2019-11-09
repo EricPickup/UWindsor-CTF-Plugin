@@ -4,15 +4,15 @@ Minecraft Plugin that used Spigot's API to create a Capture-The-Flag tournament 
 
 ## Objective
 
-The game begins with a preparation period where teams will gather resources, fortify their bases and prepare for war. PvP is disabled, and teams should respectively leave eachother alone to prepare.
+The game begins with a preparation period (usually 1.5 hours) where teams will gather resources, fortify their bases and prepare for war. PvP is disabled, and teams should respectively leave eachother alone to prepare.
 
-Teams must place their flag (banner) down inside their base. This is the flag that you must defend (and enemies should capture). This will also act as the waypoint in which you will be teleported to upon using the */teams home* command.
+Teams must place their flag (banner) down inside their base. This is the flag that you must defend (and enemies should capture). This will also act as your "home" which you can teleport to using the */teams home* command.
 
 A scoreboard is displayed on the right side of each players screen.
 
 The battle begins once the preparation period ends. PvP is enabled.
 
-Teams can score points by picking up an enemy flag and returning it to their home base. After a flag has been captured, it will be returned to it's home base and that base will be protected by a defined cooldown time to allow the team to recover.
+Teams can score points by picking up an enemy flag and returning it to their home base. After a flag has been captured, it will be returned to it's home base and that base will be protected by a defined cooldown time (e.g. 5 minutes) to allow the team to recover and re-fortify their base.
 
 If a flag carrier is killed, the flag is dropped on his position. If the flag is not re-claimed within 30 seconds, it is returned back to it's base.
 

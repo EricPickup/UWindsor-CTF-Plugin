@@ -155,9 +155,12 @@ public class FlagCarrierListener implements Listener {
 	@EventHandler
 	public void onRespawn(PlayerRespawnEvent event) {
 		for (ItemStack item : event.getPlayer().getInventory().getContents()) {
-			if (Tag.BANNERS.isTagged(item.getType())) {
+			if (item != null && Tag.BANNERS.isTagged(item.getType())) {
 				event.getPlayer().getInventory().remove(item);
 			}
+		}
+		if (event.isBedSpawn()) {
+			event.setRespawnLocation(Bukkit.getServer().getWorlds().get(0).getSpawnLocation());
 		}
 	}
 

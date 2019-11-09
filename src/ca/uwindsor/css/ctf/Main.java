@@ -175,7 +175,7 @@ public class Main extends JavaPlugin {
 					double minDistance = 999999;
 					Location closestFlag = null;
 					for (Team team : TeamManager.getTeams()) {
-						if (TeamManager.getPlayerTeam(player) != null && !(TeamManager.getPlayerTeam(player).equals(team))) {
+						if (TeamManager.getPlayerTeam(player) != null && !(TeamManager.getPlayerTeam(player).equals(team)) && !Safezones.list.contains(team)) {
 							double distanceFromEnemyTeam = player.getLocation().distance(team.getBannerSpawn());
 							if (distanceFromEnemyTeam < minDistance) {
 								minDistance = distanceFromEnemyTeam;
